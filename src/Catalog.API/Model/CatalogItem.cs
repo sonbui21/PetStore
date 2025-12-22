@@ -8,25 +8,18 @@ public class CatalogItem
     public string ShortDescription { get; set; }
     public string Description { get; set; }
     public int? Sold { get; set; }
-
-    // Price management
     public decimal Price { get; set; }
     public string CurrencyCode { get; set; }
     public DiscountType? Type { get; set; }
     public decimal? Value { get; set; }
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? EndDate { get; set; }
-
-    // Inventory management
     public int AvailableStock { get; set; }
     public int RestockThreshold { get; set; }
     public int MaxStockThreshold { get; set; }
     public bool OnReorder { get; set; }
-
-    // Image/Media
     public List<string> ImagesUrl { get; set; }
 
-    // Navigation properties
     public ICollection<CatalogCategory> CatalogCategories { get; set; }
     public ICollection<CatalogItemOption> CatalogItemOptions { get; set; }
     public ICollection<CatalogItemVariant> CatalogItemVariants { get; set; }

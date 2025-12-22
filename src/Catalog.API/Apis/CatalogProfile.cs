@@ -53,6 +53,7 @@ public class CatalogProfile : Profile
                 dest => dest.OldPrice,
                 opt => opt.MapFrom(src => src.Price + 10)
             );
+
         CreateMap<CatalogItemOption, ItemOptionDto>();
         CreateMap<CatalogItemVariant, VariantOutputDto>();
         CreateMap<CatalogItemVariantOption, VariantSelectedOptionDto>();

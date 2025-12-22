@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Catalog.API.Extensions;
+﻿namespace Catalog.API.Extensions;
 
 public static class Extensions
 {
@@ -16,13 +14,7 @@ public static class Extensions
             return;
         }
 
-        builder.AddNpgsqlDbContext<CatalogContext>("catalogdb", configureDbContextOptions: dbContextOptionsBuilder =>
-        {
-            dbContextOptionsBuilder.UseNpgsql(builder =>
-            {
-                builder.UseVector();
-            });
-        });
+        builder.AddNpgsqlDbContext<CatalogContext>("catalogdb");
 
         // REVIEW: This is done for development ease but shouldn't be here in production
         builder.Services.AddMigration<CatalogContext, CatalogContextSeed>();

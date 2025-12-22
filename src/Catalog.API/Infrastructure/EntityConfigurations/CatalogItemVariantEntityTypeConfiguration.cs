@@ -6,10 +6,8 @@ class CatalogItemVariantEntityTypeConfiguration : IEntityTypeConfiguration<Catal
     {
         builder.ToTable("CatalogItemVariant");
 
-        // Primary key
         builder.HasKey(v => v.Id);
 
-        // Required fields
         builder.Property(v => v.Title)
             .IsRequired()
             .HasMaxLength(256);
@@ -21,14 +19,11 @@ class CatalogItemVariantEntityTypeConfiguration : IEntityTypeConfiguration<Catal
         builder.Property(v => v.Price)
             .HasColumnType("decimal(18,2)");
 
-        // Inventory
         builder.Property(v => v.AvailableStock)
             .IsRequired();
 
-        // Ignore computed property
         builder.Ignore(v => v.AvailableForSale);
 
-        // Relationships
         builder.HasOne(v => v.CatalogItem)
             .WithMany(i => i.CatalogItemVariants)
             .HasForeignKey(v => v.CatalogItemId)
@@ -39,7 +34,6 @@ class CatalogItemVariantEntityTypeConfiguration : IEntityTypeConfiguration<Catal
             .HasForeignKey(o => o.CatalogItemVariantId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Indexes (performance)
         builder.HasIndex(v => v.CatalogItemId);
     }
 }

@@ -1,5 +1,15 @@
 ﻿namespace Catalog.API.Model;
 
+public record PaginationRequest(
+    [property: Description("Number of items to return in a single page of results")]
+    [property: DefaultValue(10)]
+    int PageSize = 10,
+
+    [property: Description("The number of the page of results to return")]
+    [property: DefaultValue(1)]
+    int PageNumber = 1
+);
+
 public class PaginatedList<T>(IReadOnlyCollection<T> data, int count, int pageNumber, int pageSize)
 {
     public IReadOnlyCollection<T> Data { get; } = data;

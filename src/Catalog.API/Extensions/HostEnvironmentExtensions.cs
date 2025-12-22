@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Catalog.API.Extensions;
+﻿namespace Catalog.API.Extensions;
 
 internal static class HostEnvironmentExtensions
 {

@@ -31,19 +31,15 @@ public class CatalogItemVariant
     public string Title { get; set; }
     public decimal Price { get; set; }
     public string CurrencyCode { get; set; } = "USD";
-
-    // Inventory per variant
     public int AvailableStock { get; set; }
     public bool AvailableForSale => AvailableStock > 0;
 
-    // Selected options for this variant
     public ICollection<CatalogItemVariantOption> SelectedOptions { get; set; }
 }
 
 public class CatalogItemVariantOption
 {
     public Guid Id { get; set; }
-
     public Guid CatalogItemVariantId { get; set; }
     public CatalogItemVariant CatalogItemVariant { get; set; }
 

@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace Catalog.API.Model;
+﻿namespace Catalog.API.Model;
 
 public class CatalogServices(
     CatalogContext context,

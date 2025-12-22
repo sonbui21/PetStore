@@ -10,15 +10,11 @@ public class CatalogContext(DbContextOptions<CatalogContext> options) : DbContex
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasPostgresExtension("vector");
         modelBuilder.ApplyConfiguration(new CatalogCategoryEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CatalogItemOptionEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CatalogItemVariantEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CatalogItemVariantOptionEntityTypeConfiguration());
-
-        // Add the outbox table to this context
-        //modelBuilder.UseIntegrationEventLogs();
     }
 }
 

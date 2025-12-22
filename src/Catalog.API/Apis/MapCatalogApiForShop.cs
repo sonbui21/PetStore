@@ -1,7 +1,4 @@
-﻿using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Catalog.API.Apis;
+﻿namespace Catalog.API.Apis;
 
 public static class CatalogApiForShop
 {
