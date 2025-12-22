@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.0.1" />
+    <PackageReference Include="Duende.IdentityServer" Version="7.3.2" />
+    <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.3.2" />
+    <PackageReference Include="Duende.IdentityServer.EntityFramework.Storage" Version="7.3.2" />
+    <PackageReference Include="Duende.IdentityServer.Storage" Version="7.3.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PetStore.ServiceDefaults\PetStore.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+</Project>

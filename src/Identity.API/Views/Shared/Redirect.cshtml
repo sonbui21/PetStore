@@ -1,0 +1,16 @@
+﻿@model RedirectViewModel
+
+<div class="redirect-page">
+	<div class="lead">
+		<h1>You are now being returned to the application</h1>
+		<p>Once complete, you may close this tab.</p>
+	</div>
+</div>
+
+<script>
+	// Perform client-side redirect instead of using meta refresh
+	window.location.replace('@Model.RedirectUrl');
+</script>
+<script>
+	window.location.href = document.querySelector("meta[http-equiv=refresh]").getAttribute("data-url");
+</script>

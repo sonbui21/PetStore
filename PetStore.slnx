@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="src/Catalog.API/Catalog.API.csproj" />
+  <Project Path="src/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj" Id="feb32f70-3031-4e2a-93a6-4758b6eb80f1" />
+  <Project Path="src/EventBus/EventBus.csproj" Id="6cc2d7b3-d351-4929-9ac5-efd3e3b16272" />
+  <Project Path="src/Identity.API/Identity.API.csproj" />
+  <Project Path="src/IntegrationEventLogEF/IntegrationEventLogEF.csproj" Id="13770075-3927-4f55-83e9-e3657bca0a31" />
+  <Project Path="src/PetStore.ApiService/PetStore.ApiService.csproj" />
+  <Project Path="src/PetStore.AppHost/PetStore.AppHost.csproj" />
+  <Project Path="src/PetStore.ServiceDefaults/PetStore.ServiceDefaults.csproj" />
+  <Project Path="src/PetStore.Web/PetStore.Web.csproj" />
+</Solution>
