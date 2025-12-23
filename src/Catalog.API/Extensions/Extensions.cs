@@ -17,7 +17,7 @@ public static class Extensions
         builder.AddNpgsqlDbContext<CatalogContext>("catalogdb");
 
         // REVIEW: This is done for development ease but shouldn't be here in production
-        builder.Services.AddMigration<CatalogContext, CatalogContextSeed>();
+        //builder.Services.AddMigration<CatalogContext, CatalogContextSeed>();
 
         // Add the integration services that consume the DbContext
         builder.Services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService<CatalogContext>>();
