@@ -1,47 +1,105 @@
 ﻿@model LoginViewModel
 
-<div class="login-page">
-    <div class="container">
-        <div class="row top-buffer">
+@if (Model.EnableLocalLogin)
+{
+	<section class="login__area">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-10 col-md-12">
+					<div class="login__wrapper">
+						<div class="row">
+							<div class="col-lg-6 d-flex justify-content-center">
+								<div class="login__content">
+									<div class="">
+										<img src="~/images/logo/logo.png" alt="Logo" class="header-logo" />
+										<h1 class="heading-title">Welcome Back</h1>
+										<p>
+											Sign in to access an enhanced shopping experience.
+										</p>
+									</div>
+									<div class="header-banner">
+										<img src="~/images/banner/h3_banner_shape01.png" alt="Logo" class="header_banner_img_01" />
+										<img src="~/images/banner/h3_banner_shape01_1.png" alt="Logo" class="header_banner_img_02" />
+										<img src="~/images/images/about_shape03.png" alt="Logo" class="header_banner_img_03" />
 
-            @if (Model.EnableLocalLogin)
-            {
-                <div class="col"></div>
-                <div class="col-sm-6">
-                    <form asp-route="Login">
-                        <input type="hidden" asp-for="ReturnUrl" />
-                        <div class="login-container">
-                            <h2>Login</h2>
-                            <partial name="_ValidationSummary" />
-                            <div class="form-group">
-                                <label asp-for="Username"></label>
-                                <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Password"></label>
-                                <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
-                            </div>
-                            @if (Model.AllowRememberLogin)
-                            {
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" asp-for="RememberLogin">
-                                        <label class="form-check-label" asp-for="RememberLogin">
-                                            Remember me
-                                        </label>
-                                    </div>
-                                </div>
-                            }
+									</div>
 
-                            <div>
-                                <p>The default users are bruce, password: Pass123$</p>
-                            </div>
-                            <button class="btn btn-primary" name="button" value="login">Login</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col"></div>
-            }
-        </div>
-    </div>
-</div>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="login__form-wrap">
+									<form class="login__form" asp-route="Login">
+										<input type="hidden" asp-for="ReturnUrl" />
+										<h2 class="title">Sign In</h2>
+										<partial name="_ValidationSummary" />
+										<div class="form-grp">
+											<label asp-for="Username" for="username">Email Address / Username</label>
+											<input id="username"
+												   name="username"
+												   type="text"
+												   placeholder="Enter your username or email address"
+												   autocomplete="username"
+												   asp-for="Username"
+												   required />
+										</div>
+										<div class="form-grp">
+											<label asp-for="Password" for="password">Password</label>
+											<input id="password"
+												   name="password"
+												   type="password"
+												   placeholder="Enter your password"
+												   autocomplete="current-password"
+												   asp-for="Password"
+												   required />
+										</div>
+										<div class="form-grp form-grp-checkbox">
+											<div class="form-check">
+												<input class="form-check-input"
+													   type="checkbox"
+													   id="remember"
+													   name="remember"
+													   asp-for="RememberLogin" />
+												<label class="form-check-label"
+													   for="remember"
+													   asp-for="RememberLogin"> Remember me </label>
+											</div>
+											<a href="#" class="forgot-password">Forgot Password?</a>
+										</div>
+										<button class="btn w-100 justify-content-center" name="button" value="login">
+											Login Now
+										</button>
+										<div class="login__divider">
+											<span>Or continue with</span>
+										</div>
+										<div class="login__social">
+											<ul class="list-wrap">
+												<li>
+													<a href="#" class="social-btn facebook">
+														<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95"></path></svg>
+														<span>Facebook</span>
+													</a>
+												</li>
+												<li>
+													<a href="#" class="social-btn google">
+														<svg xmlns="http://www.w3.org/2000/svg" width="0.98em" height="1em" viewBox="0 0 256 262"><path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"></path><path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"></path><path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602z"></path><path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"></path></svg>
+														<span>Google</span>
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="login__register">
+											<p>
+												Don't have an account?
+												<a href="#">Register Now</a>
+											</p>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+}

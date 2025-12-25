@@ -1,0 +1,791 @@
+/* plus-jakarta-sans-300 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-300.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-300italic - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: italic;
+    font-weight: 300;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-300italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-italic - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-500 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-500italic - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: italic;
+    font-weight: 500;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-500italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-600 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-600italic - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: italic;
+    font-weight: 600;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-600italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-700 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-700italic - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: italic;
+    font-weight: 700;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-700italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-800 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 800;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-800.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* plus-jakarta-sans-800italic - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Plus Jakarta Sans';
+    font-style: italic;
+    font-weight: 800;
+    src: url('../fonts/plus-jakarta-sans-v12-latin-800italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* baloo-bhaina-2-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Baloo Bhaina 2';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/baloo-bhaina-2-v29-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* baloo-bhaina-2-500 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Baloo Bhaina 2';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/baloo-bhaina-2-v29-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* baloo-bhaina-2-600 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Baloo Bhaina 2';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/baloo-bhaina-2-v29-latin-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* baloo-bhaina-2-700 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Baloo Bhaina 2';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/baloo-bhaina-2-v29-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* baloo-bhaina-2-800 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Baloo Bhaina 2';
+    font-style: normal;
+    font-weight: 800;
+    src: url('../fonts/baloo-bhaina-2-v29-latin-800.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+:root {
+    --tg-body-font-family: 'Plus Jakarta Sans', sans-serif;
+    --tg-heading-font-family: 'Baloo Bhaina 2', sans-serif;
+    --tg-icon-font-family: "Font Awesome 5 Free";
+    --tg-body-font-size: 16px;
+    --tg-body-line-height: 1.75;
+    --tg-heading-line-height: 1.2;
+    --tg-body-color: #445374;
+    --tg-heading-color: #002169;
+    --tg-theme-primary: #894B8D;
+    --tg-theme-secondary: #002169;
+    --tg-color-dark-blue: #0E104B;
+    --tg-color-dark-blue-2: #001950;
+    --tg-color-light-blue: #37528E;
+    --tg-color-yellow-default: #FFBE17;
+    --tg-color-yellow-light: #F9EADC;
+    --tg-color-white-default: #ffffff;
+    --tg-color-red-default: #ED1730;
+    --tg-color-gray-1: #ACB9D8;
+    --tg-color-gray-2: #686677;
+    --tg-color-gray-3: #C2A8C2;
+    --tg-color-gray-4: #F7F4F7;
+    --tg-color-gray-5: #8FA5D6;
+    --tg-color-gray-6: #D0DAEF;
+    --tg-color-gray-7: #9399A6;
+    --tg-color-dark: #111111;
+    --tg-color-black-1: #06042E;
+    --tg-color-black-2: #161439;
+    --tg-border-1: #C8C2C8;
+    --tg-border-2: #D0CACA;
+    --tg-border-3: #CCD2E1;
+    --tg-border-4: #DBE3EB;
+    --tg-border-5: #F8F8F8;
+    --tg-border-6: #E6E6E6;
+    --tg-fw-extra-bold: 800;
+    --tg-fw-bold: 700;
+    --tg-fw-semi-bold: 600;
+    --tg-fw-medium: 500;
+    --tg-fw-regular: 400;
+    --tg-fw-light: 300;
+}
+
+/*=============================
+	Typography css start
+===============================*/
+body {
+    font-family: var(--tg-body-font-family);
+    font-size: var(--tg-body-font-size);
+    font-weight: var(--tg-fw-regular);
+    color: var(--tg-body-color);
+    line-height: var(--tg-body-line-height);
+}
+
+img,
+.img {
+    max-width: 100%;
+    -webkit-transition: all 0.3s ease-out 0s;
+    -moz-transition: all 0.3s ease-out 0s;
+    -ms-transition: all 0.3s ease-out 0s;
+    -o-transition: all 0.3s ease-out 0s;
+    transition: all 0.3s ease-out 0s;
+}
+
+a,
+button {
+    color: var(--tg-theme-primary);
+    outline: none;
+    text-decoration: none;
+    -webkit-transition: all 0.3s ease-out 0s;
+    -moz-transition: all 0.3s ease-out 0s;
+    -ms-transition: all 0.3s ease-out 0s;
+    -o-transition: all 0.3s ease-out 0s;
+    transition: all 0.3s ease-out 0s;
+}
+
+    a:focus,
+    .btn:focus,
+    .button:focus {
+        text-decoration: none;
+        outline: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        -ms-box-shadow: none;
+        -o-box-shadow: none;
+        box-shadow: none;
+    }
+
+    a:hover,
+    button:hover {
+        color: var(--tg-theme-primary);
+        text-decoration: none;
+    }
+
+    button:focus,
+    input:focus,
+    input:focus,
+    textarea,
+    textarea:focus {
+        outline: 0;
+    }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--tg-heading-font-family);
+    color: var(--tg-heading-color);
+    margin-top: 0px;
+    font-weight: var(--tg-fw-bold);
+    line-height: var(--tg-heading-line-height);
+    text-transform: unset;
+}
+
+    h1 a,
+    h2 a,
+    h3 a,
+    h4 a,
+    h5 a,
+    h6 a {
+        color: inherit;
+    }
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+.list-wrap {
+    margin: 0px;
+    padding: 0px;
+}
+
+    .list-wrap li {
+        list-style: none;
+    }
+
+p {
+    font-family: var(--tg-body-font-family);
+    font-size: var(--tg-body-font-size);
+    line-height: var(--tg-body-line-height);
+    font-weight: var(--tg-fw-regular);
+    color: var(--tg-body-color);
+    margin-bottom: 15px;
+}
+
+hr {
+    border-bottom: 1px solid var(--tg-color-gray-1);
+    border-top: 0 none;
+    margin: 30px 0;
+    padding: 0;
+}
+
+label {
+    color: var(--tg-heading-color);
+    cursor: pointer;
+    font-size: var(--tg-body-font-size);
+    font-weight: var(--tg-fw-regular);
+}
+
+input[type=color] {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    border-radius: 50%;
+}
+
+*::-moz-selection {
+    background: var(--tg-theme-primary);
+    color: var(--tg-color-white-default);
+    text-shadow: none;
+}
+
+::-moz-selection {
+    background: var(--tg-theme-primary);
+    color: var(--tg-color-white-default);
+    text-shadow: none;
+}
+
+::selection {
+    background: var(--tg-theme-primary);
+    color: var(--tg-color-white-default);
+    text-shadow: none;
+}
+
+/*=============================
+    - Input Placeholder
+===============================*/
+input,
+textarea {
+    color: var(--tg-body-color);
+}
+
+*::-moz-placeholder {
+    color: var(--tg-body-color);
+    font-size: var(--tg-body-font-size);
+    opacity: 1;
+}
+
+*::placeholder {
+    color: var(--tg-body-color);
+    font-size: var(--tg-body-font-size);
+    opacity: 1;
+}
+
+/*=============================
+    - Common Classes
+===============================*/
+.fix {
+    overflow: hidden;
+}
+
+.clear {
+    clear: both;
+}
+
+/*=============================
+    - Bootstrap Custom
+=============================*/
+.container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.row {
+    --bs-gutter-x: 30px;
+}
+
+.gutter-y-30 {
+    --bs-gutter-y: 30px;
+}
+
+.gx-0 {
+    --bs-gutter-x: 0;
+}
+
+.gutter-24 {
+    --bs-gutter-x: 24px;
+}
+
+.gutter-20 {
+    --bs-gutter-x: 20px;
+}
+
+.gutter-15 {
+    --bs-gutter-x: 15px;
+}
+
+.container {
+    max-width: 1320px;
+}
+
+@media (max-width: 1500px) {
+    .container {
+        max-width: 1250px;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .container {
+        max-width: 100%;
+    }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+.custom-container {
+    max-width: 1790px;
+}
+
+@media (max-width: 1800px) {
+    .custom-container {
+        max-width: 1680px;
+    }
+}
+
+@media (max-width: 1500px) {
+    .custom-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .custom-container {
+        max-width: 960px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .custom-container {
+        max-width: 720px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .custom-container {
+        max-width: 100%;
+    }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+    .custom-container {
+        max-width: 540px;
+    }
+}
+
+.custom-container-two {
+    max-width: 1350px;
+}
+
+@media (max-width: 1800px) {
+    .custom-container-two {
+        max-width: 1350px;
+    }
+}
+
+@media (max-width: 1500px) {
+    .custom-container-two {
+        max-width: 1330px;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .custom-container-two {
+        max-width: 960px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .custom-container-two {
+        max-width: 720px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .custom-container-two {
+        max-width: 100%;
+    }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+    .custom-container-two {
+        max-width: 540px;
+    }
+}
+
+.include-bg {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/*=============================
+	02. Button style
+===============================*/
+.tg-button-wrap {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.btn {
+    user-select: none;
+    -moz-user-select: none;
+    background: var(--tg-theme-primary) none repeat scroll 0 0;
+    border: medium none;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -o-border-radius: 100px;
+    -ms-border-radius: 100px;
+    border-radius: 100px;
+    color: var(--tg-color-white-default);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1;
+    margin-bottom: 0;
+    padding: 20px 30px 16px 30px;
+    text-align: center;
+    text-transform: capitalize;
+    touch-action: manipulation;
+    -webkit-transition: all 0.3s ease-out 0s;
+    -moz-transition: all 0.3s ease-out 0s;
+    -ms-transition: all 0.3s ease-out 0s;
+    -o-transition: all 0.3s ease-out 0s;
+    transition: all 0.3s ease-out 0s;
+    vertical-align: middle;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    font-family: var(--tg-heading-font-family);
+    gap: 10px;
+    --arrow-hover-move-x: -110%;
+}
+
+    .btn::before {
+        content: "";
+        position: absolute;
+        -webkit-transition-duration: 800ms;
+        transition-duration: 800ms;
+        width: 200%;
+        height: 200%;
+        top: 110%;
+        left: 50%;
+        background: var(--tg-theme-secondary);
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -o-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
+        z-index: -1;
+    }
+
+    .btn svg {
+        -webkit-transform: translateY(-2.5px);
+        -moz-transform: translateY(-2.5px);
+        -ms-transform: translateY(-2.5px);
+        -o-transform: translateY(-2.5px);
+        transform: translateY(-2.5px);
+    }
+
+        .btn svg path {
+            transition: transform 0.38s cubic-bezier(0.37, 0.08, 0.02, 0.93), opacity 0.18s ease-out;
+        }
+
+            .btn svg path:nth-of-type(1) {
+                transform: translateX(0);
+                opacity: 1;
+                transition-delay: 0.15s, 0.15s;
+            }
+
+            .btn svg path:nth-of-type(2) {
+                transform: translateX(calc(1 * var(--arrow-hover-move-x)));
+                opacity: 0.5;
+                transition-delay: 0s, 0s;
+            }
+
+    .btn:hover, .btn:focus-visible {
+        color: var(--tg-color-white-default);
+        background: var(--tg-theme-primary);
+    }
+
+        .btn:hover:before, .btn:focus-visible:before {
+            top: -40%;
+        }
+
+        .btn:hover svg path:nth-of-type(1), .btn:focus-visible svg path:nth-of-type(1) {
+            transform: translateX(calc(-1 * var(--arrow-hover-move-x)));
+            opacity: 0;
+            transition-delay: 0s, 0s;
+        }
+
+        .btn:hover svg path:nth-of-type(2), .btn:focus-visible svg path:nth-of-type(2) {
+            transform: translateX(0) translateY(0);
+            opacity: 1;
+            transition-delay: 0.15s, 0.15s;
+        }
+
+.btn-two {
+    background: var(--tg-color-gray-4);
+    color: var(--tg-theme-primary);
+}
+
+    .btn-two:hover {
+        color: var(--tg-color-white-default);
+        background: var(--tg-color-gray-4);
+    }
+
+    .btn-two::before {
+        background: var(--tg-theme-secondary);
+    }
+
+.border-btn {
+    border: 1px solid var(--tg-theme-primary);
+    background: transparent;
+    color: var(--tg-body-color);
+}
+
+    .border-btn:hover {
+        background: transparent;
+        border-color: var(--tg-theme-primary);
+    }
+
+        .border-btn:hover::before {
+            background: var(--tg-theme-primary);
+        }
+
+    .border-btn.white-btn {
+        color: var(--tg-color-white-default);
+        border-color: var(--tg-color-white-default);
+    }
+
+        .border-btn.white-btn:hover {
+            color: var(--tg-theme-secondary);
+        }
+
+            .border-btn.white-btn:hover::before {
+                background: var(--tg-color-white-default);
+            }
+
+/*=============================
+	09. Section Title
+===============================*/
+.section__title .sub-title {
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--tg-theme-primary);
+    margin-bottom: 14px;
+    display: inline-flex;
+    line-height: 1;
+    font-family: var(--tg-heading-font-family);
+    gap: 6px;
+}
+
+    .section__title .sub-title svg {
+        color: var(--tg-color-gray-3);
+        transform: translateY(-3px);
+    }
+
+.section__title .title {
+    margin-bottom: 0;
+    font-size: 40px;
+    text-transform: capitalize;
+    line-height: 1.1;
+}
+
+@media (max-width: 1199.98px) {
+    .section__title .title {
+        font-size: 38px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .section__title .title {
+        font-size: 35px;
+    }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+    .section__title .title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .section__title .title br {
+        display: none;
+    }
+}
+
+.section__title p {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+@media (max-width: 767.98px) {
+    .section__title p br {
+        display: none;
+    }
+}
+
+.section__title-two .title {
+    margin-bottom: 0;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.1;
+    position: relative;
+    display: inline-block;
+    padding-right: 13px;
+}
+
+    .section__title-two .title svg {
+        position: absolute;
+        right: 0;
+        top: -8px;
+        color: var(--tg-theme-primary);
+    }
+
+.section__title.white-title .sub-title {
+    color: var(--tg-color-gray-5);
+}
+
+    .section__title.white-title .sub-title svg {
+        color: var(--tg-color-light-blue);
+    }
+
+.section__title.white-title .title {
+    color: var(--tg-color-white-default);
+}
+
+.section__title.white-title p {
+    color: var(--tg-color-gray-5);
+}
+
+@media (max-width: 991.98px) {
+    .section__title.mb-40 {
+        margin-bottom: 30px;
+    }
+}

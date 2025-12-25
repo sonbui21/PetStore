@@ -24,4 +24,9 @@
     <ProjectReference Include="..\PetStore.ServiceDefaults\PetStore.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\lib\bootstrap\css\" />
+  </ItemGroup>
+
 </Project>

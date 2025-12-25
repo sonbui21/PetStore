@@ -102,7 +102,7 @@ public class AccountController(
                 else
                 {
                     // user might have clicked on a malicious link - should be logged
-                    throw new Exception("invalid return URL");
+                    //throw new Exception("invalid return URL");
                 }
             }
 

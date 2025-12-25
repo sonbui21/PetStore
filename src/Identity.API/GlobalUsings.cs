@@ -27,3 +27,4 @@ global using System.Text.RegularExpressions;
 global using System.Text;
 global using System.Text.Json;
 global using Identity.API.Controllers.Diagnostics;
+global using Identity.API.Controllers.Grants;

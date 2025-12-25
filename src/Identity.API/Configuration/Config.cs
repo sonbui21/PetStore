@@ -54,7 +54,7 @@ public static class Config
                     RequirePkce = true,
 
                     RedirectUris = { $"{configuration["ClientUrls:PetEcommerce"]}/api/auth/callback/identity-service" },
-                    PostLogoutRedirectUris = { $"{configuration["ClientUrls:PetEcommerce"]}" },
+                    PostLogoutRedirectUris = { $"{configuration["ClientUrls:PetEcommerce"]}/api/auth/logout?logged_out=true" },
                     AllowedCorsOrigins= { $"{configuration["ClientUrls:PetEcommerce"]}" },
 
                     AllowedScopes =

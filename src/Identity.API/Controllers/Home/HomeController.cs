@@ -5,10 +5,20 @@ public class HomeController(
     IWebHostEnvironment environment,
     ILogger<HomeController> logger) : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         if (environment.IsDevelopment())
         {
+            var result = await HttpContext.AuthenticateAsync();
+            if (result.Principal is not null)
+            {
+                var model = new DiagnosticsViewModel(result);
+                if (model is not null)
+                {
+                    return View(model);
+                }
+            }
+
             // only show in development
             return View();
         }
