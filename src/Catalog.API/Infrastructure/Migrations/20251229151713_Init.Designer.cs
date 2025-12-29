@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Catalog.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20251222101657_Init")]
+    [Migration("20251229151713_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -26,7 +26,45 @@ namespace Catalog.API.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Catalog.API.Model.CatalogCategory", b =>
+            modelBuilder.Entity("Catalog.API.Model.CatalogItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("AvailableStock")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CurrencyCode")
+                        .HasColumnType("text");
+
+                    b.PrimitiveCollection<List<string>>("Images")
+                        .HasColumnType("text[]");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("Title");
+
+                    b.ToTable("CatalogItem", (string)null);
+                });
+
+            modelBuilder.Entity("Catalog.API.Model.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,78 +91,10 @@ namespace Catalog.API.Infrastructure.Migrations
                     b.HasIndex("Index")
                         .IsUnique();
 
-                    b.ToTable("CatalogCategory", (string)null);
+                    b.ToTable("Category", (string)null);
                 });
 
-            modelBuilder.Entity("Catalog.API.Model.CatalogItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("AvailableStock")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CurrencyCode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset?>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.PrimitiveCollection<List<string>>("ImagesUrl")
-                        .HasColumnType("text[]");
-
-                    b.Property<int>("MaxStockThreshold")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("OnReorder")
-                        .HasColumnType("boolean");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("RestockThreshold")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ShortDescription")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int?>("Sold")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset?>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int?>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal?>("Value")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Slug")
-                        .IsUnique();
-
-                    b.HasIndex("Title");
-
-                    b.ToTable("CatalogItem", (string)null);
-                });
-
-            modelBuilder.Entity("Catalog.API.Model.CatalogItemOption", b =>
+            modelBuilder.Entity("Catalog.API.Model.ItemOption", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,9 +106,6 @@ namespace Catalog.API.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("PriceAdjustment")
-                        .HasColumnType("numeric");
-
                     b.PrimitiveCollection<List<string>>("Values")
                         .HasColumnType("text[]");
 
@@ -146,10 +113,10 @@ namespace Catalog.API.Infrastructure.Migrations
 
                     b.HasIndex("CatalogItemId");
 
-                    b.ToTable("CatalogItemOption", (string)null);
+                    b.ToTable("ItemOption", (string)null);
                 });
 
-            modelBuilder.Entity("Catalog.API.Model.CatalogItemVariant", b =>
+            modelBuilder.Entity("Catalog.API.Model.ItemVariant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -160,11 +127,6 @@ namespace Catalog.API.Infrastructure.Migrations
 
                     b.Property<Guid>("CatalogItemId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("CurrencyCode")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -178,16 +140,16 @@ namespace Catalog.API.Infrastructure.Migrations
 
                     b.HasIndex("CatalogItemId");
 
-                    b.ToTable("CatalogItemVariant", (string)null);
+                    b.ToTable("ItemVariant", (string)null);
                 });
 
-            modelBuilder.Entity("Catalog.API.Model.CatalogItemVariantOption", b =>
+            modelBuilder.Entity("Catalog.API.Model.ItemVariantOption", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CatalogItemVariantId")
+                    b.Property<Guid>("ItemVariantId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -202,30 +164,30 @@ namespace Catalog.API.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CatalogItemVariantId", "Name");
+                    b.HasIndex("ItemVariantId", "Name");
 
-                    b.ToTable("CatalogItemVariantOption", (string)null);
+                    b.ToTable("ItemVariantOption", (string)null);
                 });
 
-            modelBuilder.Entity("CatalogCategoryCatalogItem", b =>
+            modelBuilder.Entity("CatalogItemCategory", b =>
                 {
-                    b.Property<Guid>("CatalogCategoriesId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("CatalogItemsId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("CatalogCategoriesId", "CatalogItemsId");
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("CatalogItemsId");
+                    b.HasKey("CatalogItemsId", "CategoriesId");
 
-                    b.ToTable("CatalogCategoryCatalogItem");
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("CatalogItemCategory");
                 });
 
-            modelBuilder.Entity("Catalog.API.Model.CatalogItemOption", b =>
+            modelBuilder.Entity("Catalog.API.Model.ItemOption", b =>
                 {
                     b.HasOne("Catalog.API.Model.CatalogItem", "CatalogItem")
-                        .WithMany("CatalogItemOptions")
+                        .WithMany("ItemOptions")
                         .HasForeignKey("CatalogItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -233,10 +195,10 @@ namespace Catalog.API.Infrastructure.Migrations
                     b.Navigation("CatalogItem");
                 });
 
-            modelBuilder.Entity("Catalog.API.Model.CatalogItemVariant", b =>
+            modelBuilder.Entity("Catalog.API.Model.ItemVariant", b =>
                 {
                     b.HasOne("Catalog.API.Model.CatalogItem", "CatalogItem")
-                        .WithMany("CatalogItemVariants")
+                        .WithMany("ItemVariants")
                         .HasForeignKey("CatalogItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -244,42 +206,42 @@ namespace Catalog.API.Infrastructure.Migrations
                     b.Navigation("CatalogItem");
                 });
 
-            modelBuilder.Entity("Catalog.API.Model.CatalogItemVariantOption", b =>
+            modelBuilder.Entity("Catalog.API.Model.ItemVariantOption", b =>
                 {
-                    b.HasOne("Catalog.API.Model.CatalogItemVariant", "CatalogItemVariant")
-                        .WithMany("SelectedOptions")
-                        .HasForeignKey("CatalogItemVariantId")
+                    b.HasOne("Catalog.API.Model.ItemVariant", "ItemVariant")
+                        .WithMany("Options")
+                        .HasForeignKey("ItemVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CatalogItemVariant");
+                    b.Navigation("ItemVariant");
                 });
 
-            modelBuilder.Entity("CatalogCategoryCatalogItem", b =>
+            modelBuilder.Entity("CatalogItemCategory", b =>
                 {
-                    b.HasOne("Catalog.API.Model.CatalogCategory", null)
-                        .WithMany()
-                        .HasForeignKey("CatalogCategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Catalog.API.Model.CatalogItem", null)
                         .WithMany()
                         .HasForeignKey("CatalogItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Catalog.API.Model.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Catalog.API.Model.CatalogItem", b =>
                 {
-                    b.Navigation("CatalogItemOptions");
+                    b.Navigation("ItemOptions");
 
-                    b.Navigation("CatalogItemVariants");
+                    b.Navigation("ItemVariants");
                 });
 
-            modelBuilder.Entity("Catalog.API.Model.CatalogItemVariant", b =>
+            modelBuilder.Entity("Catalog.API.Model.ItemVariant", b =>
                 {
-                    b.Navigation("SelectedOptions");
+                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }

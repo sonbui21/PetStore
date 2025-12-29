@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="src/Basket.API/Basket.API.csproj" />
   <Project Path="src/Catalog.API/Catalog.API.csproj" />
   <Project Path="src/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj" Id="feb32f70-3031-4e2a-93a6-4758b6eb80f1" />
   <Project Path="src/EventBus/EventBus.csproj" Id="6cc2d7b3-d351-4929-9ac5-efd3e3b16272" />

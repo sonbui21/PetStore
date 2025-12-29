@@ -73,6 +73,32 @@ public static class Config
                     IdentityTokenLifetime= 60*60*2 // 2 hours
                 },
                 new Client
+{
+    ClientId = "postman-pkce",
+    ClientName = "Postman PKCE",
+    AllowedGrantTypes = GrantTypes.Code,
+    RequirePkce = true,
+    RequireClientSecret = false, // public client (đúng kiểu PKCE)
+
+    RedirectUris = { "https://oauth.pstmn.io/v1/callback" },
+    PostLogoutRedirectUris = { "https://oauth.pstmn.io/v1/callback" },
+    AllowedCorsOrigins = { "https://oauth.pstmn.io" },
+
+    AllowedScopes =
+    {
+        IdentityServerConstants.StandardScopes.OpenId,
+        IdentityServerConstants.StandardScopes.Profile,
+        IdentityServerConstants.StandardScopes.OfflineAccess,
+        "orders",
+        "basket",
+        "SampleAPI"
+    },
+    AllowOfflineAccess = true,
+
+    AccessTokenLifetime = 60 * 60 * 2,
+    IdentityTokenLifetime = 60 * 60 * 2
+},
+                new Client
                 {
                     ClientId = "pet-dashboard",
                     ClientName = "Pet Dashboard",

@@ -86,7 +86,7 @@ public static class CatalogApi
         var pageSize = paginationRequest.PageSize;
         var pageNumber = paginationRequest.PageNumber;
 
-        var root = (IQueryable<CatalogCategory>)services.Context.CatalogCategories;
+        var root = (IQueryable<Category>)services.Context.Categories;
 
         if (id is not null)
         {
@@ -119,16 +119,16 @@ public static class CatalogApi
         [AsParameters] CatalogServices services,
         CancellationToken cancellationToken)
     {
-        var existingCategory = await services.Context.CatalogCategories.FirstOrDefaultAsync(c => c.Slug == request.Slug, cancellationToken);
+        var existingCategory = await services.Context.Categories.FirstOrDefaultAsync(c => c.Slug == request.Slug, cancellationToken);
         if (existingCategory != null)
         {
             return TypedResults.BadRequest<ProblemDetails>(new() { Detail = $"A category with slug '{request.Slug}' already exists." });
         }
 
-        var category = services.Mapper.Map<CatalogCategory>(request);
+        var category = services.Mapper.Map<Category>(request);
         category.Id = Guid.NewGuid();
 
-        services.Context.CatalogCategories.Add(category);
+        services.Context.Categories.Add(category);
         await services.Context.SaveChangesAsync(cancellationToken);
 
         return TypedResults.Created($"/api/catalog/categories/{category.Id}");
@@ -140,19 +140,19 @@ public static class CatalogApi
         [AsParameters] CatalogServices services,
         CancellationToken cancellationToken)
     {
-        var category = await services.Context.CatalogCategories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        var category = await services.Context.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         if (category is null)
         {
             return TypedResults.NotFound();
         }
 
-        var hasItems = await services.Context.CatalogItems.AnyAsync(ci => ci.CatalogCategories.Any(cc => cc.Id == id), cancellationToken);
+        var hasItems = await services.Context.CatalogItems.AnyAsync(ci => ci.Categories.Any(cc => cc.Id == id), cancellationToken);
         if (hasItems)
         {
             return TypedResults.BadRequest<ProblemDetails>(new() { Detail = "Cannot delete category that has associated items." });
         }
 
-        services.Context.CatalogCategories.Remove(category);
+        services.Context.Categories.Remove(category);
         await services.Context.SaveChangesAsync(cancellationToken);
 
         return TypedResults.NoContent();
@@ -165,7 +165,7 @@ public static class CatalogApi
         [AsParameters] CatalogServices services,
         CancellationToken cancellationToken)
     {
-        var category = await services.Context.CatalogCategories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        var category = await services.Context.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         if (category is null)
         {
             return TypedResults.NotFound<ProblemDetails>(new() { Detail = $"Item with id {id} not found." });
@@ -173,7 +173,7 @@ public static class CatalogApi
 
         if (category.Slug != request.Slug)
         {
-            var existingCategory = await services.Context.CatalogCategories
+            var existingCategory = await services.Context.Categories
                 .FirstOrDefaultAsync(c => c.Slug == request.Slug && c.Id != id, cancellationToken);
             if (existingCategory != null)
             {

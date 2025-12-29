@@ -1,10 +1,10 @@
 ﻿namespace Catalog.API.Infrastructure.EntityConfigurations;
 
-class CatalogItemVariantEntityTypeConfiguration : IEntityTypeConfiguration<CatalogItemVariant>
+class ItemVariantEntityTypeConfiguration : IEntityTypeConfiguration<ItemVariant>
 {
-    public void Configure(EntityTypeBuilder<CatalogItemVariant> builder)
+    public void Configure(EntityTypeBuilder<ItemVariant> builder)
     {
-        builder.ToTable("CatalogItemVariant");
+        builder.ToTable("ItemVariant");
 
         builder.HasKey(v => v.Id);
 
@@ -12,26 +12,20 @@ class CatalogItemVariantEntityTypeConfiguration : IEntityTypeConfiguration<Catal
             .IsRequired()
             .HasMaxLength(256);
 
-        builder.Property(v => v.CurrencyCode)
-            .IsRequired()
-            .HasMaxLength(3);
-
         builder.Property(v => v.Price)
             .HasColumnType("decimal(18,2)");
 
         builder.Property(v => v.AvailableStock)
             .IsRequired();
 
-        builder.Ignore(v => v.AvailableForSale);
-
         builder.HasOne(v => v.CatalogItem)
-            .WithMany(i => i.CatalogItemVariants)
+            .WithMany(i => i.ItemVariants)
             .HasForeignKey(v => v.CatalogItemId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(v => v.SelectedOptions)
-            .WithOne(o => o.CatalogItemVariant)
-            .HasForeignKey(o => o.CatalogItemVariantId)
+        builder.HasMany(v => v.Options)
+            .WithOne(o => o.ItemVariant)
+            .HasForeignKey(o => o.ItemVariantId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(v => v.CatalogItemId);

@@ -1,10 +1,10 @@
 ﻿namespace Catalog.API.Infrastructure.EntityConfigurations;
 
-class CatalogCategoryEntityTypeConfiguration: IEntityTypeConfiguration<CatalogCategory>
+class CategoryEntityTypeConfiguration: IEntityTypeConfiguration<Category>
 {
-    public void Configure(EntityTypeBuilder<CatalogCategory> builder)
+    public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.ToTable("CatalogCategory");
+        builder.ToTable("Category");
         builder
             .Property(c => c.Name)
             .IsRequired()

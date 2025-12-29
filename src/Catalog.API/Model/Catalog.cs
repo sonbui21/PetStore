@@ -1,6 +1,6 @@
 ﻿namespace Catalog.API.Model;
 
-public class CatalogCategory
+public class Category
 {
     public Guid Id { get; set; }
     public int Index { get; set; }
@@ -11,18 +11,17 @@ public class CatalogCategory
     public ICollection<CatalogItem> CatalogItems { get; set; }
 }
 
-public class CatalogItemOption
+public class ItemOption
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
     public List<string> Values { get; set; }
-    public decimal? PriceAdjustment { get; set; }
 
     public Guid CatalogItemId { get; set; }
     public CatalogItem CatalogItem { get; set; }
 }
 
-public class CatalogItemVariant
+public class ItemVariant
 {
     public Guid Id { get; set; }
     public Guid CatalogItemId { get; set; }
@@ -30,18 +29,16 @@ public class CatalogItemVariant
 
     public string Title { get; set; }
     public decimal Price { get; set; }
-    public string CurrencyCode { get; set; } = "USD";
     public int AvailableStock { get; set; }
-    public bool AvailableForSale => AvailableStock > 0;
 
-    public ICollection<CatalogItemVariantOption> SelectedOptions { get; set; }
+    public ICollection<ItemVariantOption> Options { get; set; }
 }
 
-public class CatalogItemVariantOption
+public class ItemVariantOption
 {
     public Guid Id { get; set; }
-    public Guid CatalogItemVariantId { get; set; }
-    public CatalogItemVariant CatalogItemVariant { get; set; }
+    public Guid ItemVariantId { get; set; }
+    public ItemVariant ItemVariant { get; set; }
 
     public string Name { get; set; }
     public string Value { get; set; }

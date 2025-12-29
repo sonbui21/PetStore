@@ -44,6 +44,23 @@ public static class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Adds the services except for making outgoing HTTP calls.
+    /// </summary>
+    /// <remarks>
+    /// This allows for things like Polly to be trimmed out of the app if it isn't used.
+    /// </remarks>
+    public static IHostApplicationBuilder AddBasicServiceDefaults(this IHostApplicationBuilder builder)
+    {
+        // Default health checks assume the event bus and self health checks
+        builder.AddDefaultHealthChecks();
+
+        builder.ConfigureOpenTelemetry();
+
+        return builder;
+    }
+
+
     public static TBuilder ConfigureOpenTelemetry<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.Logging.AddOpenTelemetry(logging =>

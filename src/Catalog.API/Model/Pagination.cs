@@ -10,16 +10,23 @@ public record PaginationRequest(
     int PageNumber = 1
 );
 
+public record Pagination(
+    int PageNumber,
+    int TotalPages,
+    int TotalCount,
+    bool HasPreviousPage,
+    bool HasNextPage
+);
+
 public class PaginatedList<T>(IReadOnlyCollection<T> data, int count, int pageNumber, int pageSize)
 {
     public IReadOnlyCollection<T> Data { get; } = data;
-    public int PageNumber { get; } = pageNumber;
-    public int TotalPages { get; } = (int)Math.Ceiling(count / (double)pageSize);
-    public int TotalCount { get; } = count;
-
-    public bool HasPreviousPage => PageNumber > 1;
-
-    public bool HasNextPage => PageNumber < TotalPages;
+    public Pagination Pagination { get; } = new Pagination(
+        pageNumber,
+        (int)Math.Ceiling(count / (double)pageSize),
+        count,
+        pageNumber > 1,
+        pageNumber < (int)Math.Ceiling(count / (double)pageSize));
 
     public static async Task<PaginatedList<T>> CreateAsync(
         IQueryable<T> source,

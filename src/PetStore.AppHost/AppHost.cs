@@ -17,4 +17,6 @@ builder.AddProject<Projects.Identity_API>("identity-api");
 
 builder.AddProject<Projects.Catalog_API>("catalog-api");
 
+builder.AddProject<Projects.Basket_API>("basket-api");
+
 builder.Build().Run();

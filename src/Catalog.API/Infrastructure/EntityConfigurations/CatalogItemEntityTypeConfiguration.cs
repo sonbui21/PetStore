@@ -19,10 +19,10 @@ class CatalogItemEntityTypeConfiguration : IEntityTypeConfiguration<CatalogItem>
         builder.HasIndex(ci => ci.Title);
 
         builder
-            .HasMany(ci => ci.CatalogCategories)
+            .HasMany(ci => ci.Categories)
             .WithMany(c => c.CatalogItems);
         builder
-            .HasMany(ci => ci.CatalogItemOptions)
+            .HasMany(ci => ci.ItemOptions)
             .WithOne(o => o.CatalogItem)
             .HasForeignKey(o => o.CatalogItemId);
     }

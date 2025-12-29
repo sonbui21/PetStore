@@ -72,15 +72,15 @@ public static class CatalogApiForShop
     }
 
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
-    public static async Task<Ok<ResultList<CategoryOutputDto>>> GetCategoriesForSearch(
+    public static async Task<Ok<ResultList<CategoryForSearchDto>>> GetCategoriesForSearch(
         [AsParameters] CatalogServices services,
         CancellationToken cancellationToken)
     {
-        var root = (IQueryable<CatalogCategory>)services.Context.CatalogCategories;
+        var root = (IQueryable<Category>)services.Context.Categories;
 
         var categories = await root
             .OrderBy(c => c.Index)
-            .ProjectTo<CategoryOutputDto>(services.Mapper.ConfigurationProvider)
+            .ProjectTo<CategoryForSearchDto>(services.Mapper.ConfigurationProvider)
             .ToResultListAsync(cancellationToken);
 
         return TypedResults.Ok(categories);
@@ -104,12 +104,12 @@ public static class CatalogApiForShop
 
                 foreach (var item in categorySlugs)
                 {
-                    root = root.Where(c => c.CatalogCategories.Any(cate => EF.Functions.ILike(cate.Slug, $"%{item}")));
+                    root = root.Where(c => c.Categories.Any(cate => EF.Functions.ILike(cate.Slug, $"%{item}")));
                 }
             }
             else
             {
-                root = root.Where(c => c.CatalogCategories.Any(cate => EF.Functions.ILike(cate.Slug, $"%{categorySlug}")));
+                root = root.Where(c => c.Categories.Any(cate => EF.Functions.ILike(cate.Slug, $"%{categorySlug}")));
             }
         }
 
@@ -122,7 +122,7 @@ public static class CatalogApiForShop
     }
 
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
-    public static async Task<Results<Ok<Result<ItemOutputDto>>, NotFound>> GetItemBySlug(
+    public static async Task<Results<Ok<Result<CatalogItemDto>>, NotFound>> GetItemBySlug(
         [Description("The catalog item slug")] string slug,
         [AsParameters] CatalogServices services,
         CancellationToken cancellationToken)
@@ -136,12 +136,12 @@ public static class CatalogApiForShop
 
         var item = await root
             .Where(ci => ci.Slug == slug)
-            .ProjectTo<ItemOutputDto>(services.Mapper.ConfigurationProvider)
+            .ProjectTo<CatalogItemDto>(services.Mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(cancellationToken);
 
         return item is null
             ? TypedResults.NotFound()
-            : TypedResults.Ok(new Result<ItemOutputDto>(item));
+            : TypedResults.Ok(new Result<CatalogItemDto>(item));
     }
 
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
@@ -152,7 +152,7 @@ public static class CatalogApiForShop
         var root = (IQueryable<CatalogItem>)services.Context.CatalogItems;
 
         var items = await root
-            .Where(c => c.CatalogCategories.Any(cate => EF.Functions.ILike(cate.Slug, "%premium%")))
+            .Where(c => c.Categories.Any(cate => EF.Functions.ILike(cate.Slug, "%premium%")))
             .OrderBy(c => c.Slug)
             .Take(10)
             .ProjectTo<ItemCardDto>(services.Mapper.ConfigurationProvider)
@@ -162,16 +162,16 @@ public static class CatalogApiForShop
     }
 
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
-    public static async Task<Ok<ResultList<CategoryOutputDto>>> GetCategoriesForNav(
+    public static async Task<Ok<ResultList<CategoryDto>>> GetCategoriesForNav(
         [AsParameters] CatalogServices services,
         CancellationToken cancellationToken)
     {
-        var root = (IQueryable<CatalogCategory>)services.Context.CatalogCategories;
+        var root = (IQueryable<Category>)services.Context.Categories;
 
         var categories = await root
             .OrderBy(c => c.Index)
             .Take(5)
-            .ProjectTo<CategoryOutputDto>(services.Mapper.ConfigurationProvider)
+            .ProjectTo<CategoryDto>(services.Mapper.ConfigurationProvider)
             .ToResultListAsync(cancellationToken);
 
         return TypedResults.Ok(categories);

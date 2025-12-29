@@ -1,0 +1,16 @@
+﻿global using EventBus.RabbitMQ;
+global using EventBus.Extensions;
+global using EventBus.Events;
+global using System.ComponentModel.DataAnnotations;
+global using StackExchange.Redis;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using Basket.API.IntegrationEvents.Events;
+global using Basket.API.Repositories;
+global using EventBus.Abstractions;
+global using Basket.API.IntegrationEvents.EventHandling;
+global using PetStore.ServiceDefaults;
+global using Basket.API.Extensions;
+global using Basket.API.Grpc;
+global using Grpc.Core;
+global using System.Security.Claims;

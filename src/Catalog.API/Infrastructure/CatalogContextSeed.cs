@@ -21,8 +21,8 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
         var baseS3Url = "https://pet-shop-21.s3.ap-southeast-1.amazonaws.com/products";
 
         await context.CatalogItems.ExecuteDeleteAsync();
-        await context.CatalogCategories.ExecuteDeleteAsync();
-        await context.CatalogItemOptions.ExecuteDeleteAsync();
+        await context.Categories.ExecuteDeleteAsync();
+        await context.ItemOptions.ExecuteDeleteAsync();
 
         var categories = BuildCategories();
         var templates = BuildItemTemplates();
@@ -37,16 +37,16 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
             repeatPerTemplate: RepeatPerTemplate
         );
 
-        await context.CatalogCategories.AddRangeAsync(categories);
+        await context.Categories.AddRangeAsync(categories);
         await context.CatalogItems.AddRangeAsync(items);
 
         logger.LogInformation("Seeded catalog with {NumItems} items", await context.CatalogItems.CountAsync());
         await context.SaveChangesAsync();
     }
 
-    private static List<CatalogCategory> BuildCategories()
+    private static List<Category> BuildCategories()
     {
-        return new List<CatalogCategory>
+        return new List<Category>
         {
             new() { Id = Guid.NewGuid(), Index = 0, Name = "New Arrivals",     Slug = "collections/new-at-petpal" },
             new() { Id = Guid.NewGuid(), Index = 1, Name = "Beds & Blankets",  Slug = "collections/beds" },
@@ -60,17 +60,17 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
 
     private static List<CatalogItemTemplate> BuildItemTemplates()
     {
-        return new List<CatalogItemTemplate>
-        {
+        return
+        [
             new(
                 Slug: "large-washable-fluffy-orthopedic-soft-dog-sofa-bed-snnozy-dream",
                 Title: "Large Washable Fluffy Orthopedic Soft Dog Pillow Dog Sofa Bed-Snoozy Dream",
-                ImageFiles: new[] { "item1-1.jpeg", "item1-2.jpeg", "item1-3.jpeg" },
-                Options: new (string, string[])[]
-                {
+                ImageFiles: ["item1-1.jpeg", "item1-2.jpeg", "item1-3.jpeg"],
+                Options:
+                [
                     ("Color", new[] { "Camel", "Dark Grey", "Brown" }),
                     ("Size",  new[] { "M", "L", "XL" })
-                }
+                ]
             ),
             new(
                 Slug: "festive-classic-tartan-cozy-dog-anti-anxiety-calming-bed",
@@ -162,12 +162,12 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
                     ("Size",  new[] { "1-Seater", "2-Seater", "3-Seater" })
                 }
             ),
-        };
+        ];
     }
 
     private static List<CatalogItem> GenerateItems(
         List<CatalogItemTemplate> templates,
-        List<CatalogCategory> categories,
+        List<Category> categories,
         string baseS3Url,
         int repeatPerTemplate
     )
@@ -209,11 +209,11 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
                     Title = uniqueTitle,
                     Price = 60M,
                     CurrencyCode = "USD",
-                    ImagesUrl = images,
+                    Images = images,
 
-                    CatalogCategories = RandomCategoriesWithPremium(categories),
+                    Categories = RandomCategoriesWithPremium(categories),
 
-                    CatalogItemOptions = template.Options.Select(o => new CatalogItemOption
+                    ItemOptions = template.Options.Select(o => new ItemOption
                     {
                         Id = Guid.NewGuid(),
                         Name = o.Name,
@@ -221,7 +221,7 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
                     }).ToList()
                 };
 
-                item.CatalogItemVariants = BuildVariants(item);
+                item.ItemVariants = BuildVariants(item);
                 items.Add(item);
             }
         }
@@ -260,9 +260,9 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
         }
     }
 
-    public static List<CatalogItemVariant> BuildVariants(CatalogItem item)
+    public static List<ItemVariant> BuildVariants(CatalogItem item)
     {
-        var options = item.CatalogItemOptions.ToList();
+        var options = item.ItemOptions.ToList();
 
         List<List<(string Name, string Value)>> combinations = [];
 
@@ -298,18 +298,17 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
             var offset = priceOffsets[Random.Next(priceOffsets.Length)];
             var variantPrice = item.Price * (100 + offset) / 100;
 
-            return new CatalogItemVariant
+            return new ItemVariant
             {
                 Id = Guid.NewGuid(),
                 CatalogItemId = item.Id,
                 Title = title,
                 Price = Math.Round(variantPrice, 2),
-                CurrencyCode = item.CurrencyCode,
 
                 AvailableStock = idx == outOfStockIndex ? 0 : Random.Next(1, 20),
 
-                SelectedOptions = [.. selectedOptions.Select(o =>
-                    new CatalogItemVariantOption
+                Options = [.. selectedOptions.Select(o =>
+                    new ItemVariantOption
                     {
                         Id = Guid.NewGuid(),
                         Name = o.Name,
@@ -319,8 +318,8 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
         }).ToList();
     }
 
-    public static List<CatalogCategory> RandomCategoriesWithPremium(
-        List<CatalogCategory> allCategories,
+    public static List<Category> RandomCategoriesWithPremium(
+        List<Category> allCategories,
         int randomCount = 2
     )
     {
@@ -332,7 +331,7 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
             .Take(randomCount)
             .ToList();
 
-        var result = new List<CatalogCategory> { premium };
+        var result = new List<Category> { premium };
         result.AddRange(nonPremium);
         return result;
     }
