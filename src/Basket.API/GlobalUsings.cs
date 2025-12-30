@@ -14,3 +14,6 @@ global using Basket.API.Extensions;
 global using Basket.API.Grpc;
 global using Grpc.Core;
 global using System.Security.Claims;
+global using Basket.API.Model;
+global using Microsoft.AspNetCore.Authorization;
+global using System.Diagnostics.CodeAnalysis;

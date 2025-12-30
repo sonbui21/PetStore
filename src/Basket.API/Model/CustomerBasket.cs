@@ -2,7 +2,7 @@
 
 public class CustomerBasket
 {
-    public string BuyerId { get; set; }
+    public string CartId { get; set; }
 
     public List<BasketItem> Items { get; set; } = [];
 
@@ -10,6 +10,6 @@ public class CustomerBasket
 
     public CustomerBasket(string customerId)
     {
-        BuyerId = customerId;
+        CartId = customerId;
     }
 }

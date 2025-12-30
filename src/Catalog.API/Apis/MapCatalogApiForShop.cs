@@ -170,7 +170,7 @@ public static class CatalogApiForShop
 
         var categories = await root
             .OrderBy(c => c.Index)
-            .Take(5)
+            .Take(4)
             .ProjectTo<CategoryDto>(services.Mapper.ConfigurationProvider)
             .ToResultListAsync(cancellationToken);
 

@@ -7,7 +7,7 @@ public sealed class RabbitMQEventBus(
     IOptions<EventBusSubscriptionInfo> subscriptionOptions,
     RabbitMQTelemetry rabbitMQTelemetry) : IEventBus, IDisposable, IHostedService
 {
-    private const string ExchangeName = "eshop_event_bus";
+    private const string ExchangeName = "pet_event_bus";
 
     private readonly ResiliencePipeline _pipeline = CreateResiliencePipeline(options.Value.RetryCount);
     private readonly TextMapPropagator _propagator = rabbitMQTelemetry.Propagator;
