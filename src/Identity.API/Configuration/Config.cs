@@ -9,7 +9,6 @@ public static class Config
             [
                 new ApiResource("orders", "Orders Service"),
                 new ApiResource("basket", "Basket Service"),
-                new ApiResource("SampleAPI", "SampleAPI Service"),
             ];
     }
 
@@ -21,7 +20,6 @@ public static class Config
             [
                 new ApiScope("orders", "Orders Service"),
                 new ApiScope("basket", "Basket Service"),
-                new ApiScope("SampleAPI", "Sample API"),
             ];
     }
 
@@ -54,7 +52,10 @@ public static class Config
                     RequirePkce = true,
 
                     RedirectUris = { $"{configuration["ClientUrls:PetEcommerce"]}/api/auth/callback/identity-service" },
-                    PostLogoutRedirectUris = { $"{configuration["ClientUrls:PetEcommerce"]}/api/auth/logout?logged_out=true" },
+                    PostLogoutRedirectUris =
+{
+    $"{configuration["ClientUrls:PetEcommerce"]}/api/auth/signout"
+},
                     AllowedCorsOrigins= { $"{configuration["ClientUrls:PetEcommerce"]}" },
 
                     AllowedScopes =
@@ -64,7 +65,6 @@ public static class Config
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
                         "basket",
-                        "SampleAPI"
                     ],
                     AllowOfflineAccess = true,
                     AllowAccessTokensViaBrowser = true,
@@ -91,7 +91,6 @@ public static class Config
         IdentityServerConstants.StandardScopes.OfflineAccess,
         "orders",
         "basket",
-        "SampleAPI"
     },
     AllowOfflineAccess = true,
 
@@ -122,7 +121,6 @@ public static class Config
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
                         "basket",
-                        "SampleAPI"
                     ],
                     AllowOfflineAccess = true,
                     AllowAccessTokensViaBrowser = true,
