@@ -16,6 +16,7 @@ public class CustomerBasket
     public Address ShippingAddress { get; set; }
     public Address BillingAddress { get; set; }
     public ShippingMethod ShippingMethods { get; set; }
+    public string PaymentCollection { get; set; }
     public string CurrentStep { get; set; }
 
     public CustomerBasket() { }
@@ -32,6 +33,7 @@ public class CustomerBasket
 
         Email = "";
 
+        PaymentCollection = "";
         CurrentStep = "address";
     }
 }

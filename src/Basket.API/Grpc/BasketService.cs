@@ -127,6 +127,7 @@ public class BasketService(
 
             Email = userCart.Email,
 
+            PaymentCollection = userCart.PaymentCollection,
             CurrentStep = userCart.CurrentStep,
         };
 
@@ -248,6 +249,7 @@ public class BasketService(
 
             Email = customerBasket.Email,
  
+            PaymentCollection = customerBasket.PaymentCollection,
             CurrentStep = customerBasket.CurrentStep,
         };
 
@@ -345,6 +347,7 @@ public class BasketService(
 
             Email = customerBasket.Email,
 
+            PaymentCollection = customerBasket.PaymentCollection,
             CurrentStep = customerBasket.CurrentStep,
         };
 
