@@ -1,42 +1,21 @@
 ﻿namespace Catalog.API.Apis;
 
-public static class CatalogApi
+public static partial class CatalogApi
 {
     public static IEndpointRouteBuilder MapCatalogApi(this IEndpointRouteBuilder app)
     {
         // RouteGroupBuilder for catalog endpoints
         var api = app.MapGroup("api/admin/catalog");
 
-        api.MapGet("items", GetItems)
-            .WithName("ListItems")
-            .WithSummary("List catalog items")
-            .WithDescription("Get a paginated list of items in the catalog.")
-            .WithTags("Admin/Items");
+        api.MapGet("items", GetItems);
 
-        // Routes for querying category.
-        api.MapGet("/categories", GetCategories)
-            .WithName("ListCategories")
-            .WithSummary("List catalog categories")
-            .WithDescription("Get a paginated list of category in the catalog.")
-            .WithTags("Admin/Categories");
+        api.MapGet("/categories", GetCategories);
 
-        api.MapPost("/categories", CreateCategory)
-            .WithName("CreateCategory")
-            .WithSummary("Create a new category")
-            .WithDescription("Create a new category in the catalog.")
-            .WithTags("Admin/Categories");
+        api.MapPost("/categories", CreateCategory);
 
-        api.MapPut("/categories/{id}", UpdateCategoryById)
-            .WithName("UpdateCategory")
-            .WithSummary("Update a category")
-            .WithDescription("Update an existing category in the catalog.")
-            .WithTags("Admin/Categories");
+        api.MapPut("/categories/{id}", UpdateCategoryById);
 
-        api.MapDelete("/categories/{id}", DeleteCategoryById)
-            .WithName("DeleteCategory")
-            .WithSummary("Delete a category")
-            .WithDescription("Delete a category from the catalog.")
-            .WithTags("Admin/Categories");
+        api.MapDelete("/categories/{id}", DeleteCategoryById);
 
         return app;
     }

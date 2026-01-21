@@ -1,50 +1,23 @@
 ﻿namespace Catalog.API.Apis;
 
-public static class CatalogApiForShop
+public static partial class CatalogApi
 {
     public static IEndpointRouteBuilder MapCatalogApiForShop(this IEndpointRouteBuilder app)
     {
         // RouteGroupBuilder for catalog endpoints
         var api = app.MapGroup("api/shop/catalog");
 
-        // Routes for querying item.
-        api.MapGet("/premium-items", GetPremiumItems)
-            .WithName("GetPremiumItems")
-            .WithSummary("List catalog items for homepage")
-            .WithDescription("Get a list of item for homepage in the catalog.")
-            .WithTags("Shop/Items");
+        api.MapGet("/premium-items", GetPremiumItems);
 
-        api.MapGet("/items/{slug:minlength(1)}", GetItemBySlug)
-            .WithName("GetItemBySlug")
-            .WithSummary("Get catalog item by slug")
-            .WithDescription("Get an item from the catalog")
-            .WithTags("Shop/Items");
+        api.MapGet("/items/{slug:minlength(1)}", GetItemBySlug);
 
-        api.MapGet("/items/category/{categorySlug:minlength(1)}", GetItemsByCategorySlug)
-            .WithName("GetItemsByCategorySlug")
-            .WithSummary("List catalog items by categorySlug")
-            .WithDescription("Get a list of item by categorySlug in the catalog.")
-            .WithTags("Shop/Items");
+        api.MapGet("/items/category/{categorySlug:minlength(1)}", GetItemsByCategorySlug);
 
-        api.MapGet("/items/title/{title:minlength(1)}", GetItemsByTitle)
-            .WithName("GetItemsByTitle")
-            .WithSummary("List catalog items by title")
-            .WithDescription("Get a list of item by name in the catalog.")
-            .WithTags("Shop/Items");
+        api.MapGet("/items/title/{title:minlength(1)}", GetItemsByTitle);
 
+        api.MapGet("/nav-categories", GetCategoriesForNav);
 
-        // Routes for querying category.
-        api.MapGet("/nav-categories", GetCategoriesForNav)
-            .WithName("GetCategoriesForNav")
-            .WithSummary("List catalog categories for navigation")
-            .WithDescription("Get a list of category for navigation in the catalog.")
-            .WithTags("Shop/Categories");
-
-        api.MapGet("/search-categories", GetCategoriesForSearch)
-            .WithName("GetCategoriesForSearch")
-            .WithSummary("List catalog categories for search")
-            .WithDescription("Get a list of category for search in the catalog.")
-            .WithTags("Shop/Categories");
+        api.MapGet("/search-categories", GetCategoriesForSearch);
 
         return app;
     }

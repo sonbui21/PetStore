@@ -22,10 +22,9 @@ public static partial class Extensions
 
         if (app.Environment.IsDevelopment())
         {
-            var clientId = openApiSection.GetRequiredSection("Auth").GetSection("ClientId").Value;
+            var clientId = openApiSection.GetSection("Auth").GetSection("ClientId").Value;
 
             var identitySection = configuration.GetSection("Identity");
-
             var scopes = identitySection.Exists()
                 ? identitySection.GetRequiredSection("Scopes").GetChildren().ToDictionary(p => p.Key, p => p.Value)
                 : [];

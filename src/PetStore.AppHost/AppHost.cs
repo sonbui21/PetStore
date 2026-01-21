@@ -1,24 +1,51 @@
+using PetStore.AppHost;
+using StackExchange.Redis;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
-//var cache = builder.AddRedis("cache");
+builder.AddForwardedHeaders();
 
-//var apiService = builder.AddProject<Projects.PetStore_ApiService>("apiservice")
-//    .WithHttpHealthCheck("/health");
+var redis = builder.AddRedis("redis");
+var rabbitMq = builder.AddRabbitMQ("eventbus")
+    .WithLifetime(ContainerLifetime.Persistent);
 
-//builder.AddProject<Projects.PetStore_Web>("webfrontend")
-//    .WithExternalHttpEndpoints()
-//    .WithHttpHealthCheck("/health")
-//    .WithReference(cache)
-//    .WaitFor(cache)
-//    .WithReference(apiService)
-//    .WaitFor(apiService);
+var launchProfileName = ShouldUseHttpForEndpoints() ? "http" : "https";
 
-builder.AddProject<Projects.Identity_API>("identity-api");
+// Services
+var identityApi = builder.AddProject<Projects.Identity_API>("identity-api", launchProfileName)
+    .WithExternalHttpEndpoints();
 
-builder.AddProject<Projects.Catalog_API>("catalog-api");
+var identityEndpoint = identityApi.GetEndpoint(launchProfileName);
 
-builder.AddProject<Projects.Basket_API>("basket-api");
+var catalogApi = builder.AddProject<Projects.Catalog_API>("catalog-api")
+    .WithReference(rabbitMq).WaitFor(rabbitMq);
 
-builder.AddProject<Projects.Ordering_API>("ordering-api");
+var basketApi = builder.AddProject<Projects.Basket_API>("basket-api")
+    .WithReference(redis)
+    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithEnvironment("Identity__Url", identityEndpoint);
+redis.WithParentRelationship(basketApi);
+
+var orderingApi = builder.AddProject<Projects.Ordering_API>("ordering-api")
+    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithHttpHealthCheck("/health")
+    .WithEnvironment("Identity__Url", identityEndpoint);
+
+// Identity has a reference to all of the apps for callback urls, this is a cyclic reference
+identityApi.WithEnvironment("BasketApiClient", basketApi.GetEndpoint("http"))
+           .WithEnvironment("OrderingApiClient", orderingApi.GetEndpoint("http"));
+
 
 await builder.Build().RunAsync();
+
+// For test use only.
+// Looks for an environment variable that forces the use of HTTP for all the endpoints. We
+// are doing this for ease of running the Playwright tests in CI.
+static bool ShouldUseHttpForEndpoints()
+{
+    const string EnvVarName = "ESHOP_USE_HTTP_ENDPOINTS";
+    var envValue = Environment.GetEnvironmentVariable(EnvVarName);
+
+    // Attempt to parse the environment variable value; return true if it's exactly "1".
+    return int.TryParse(envValue, out int result) && result == 1;
+}
