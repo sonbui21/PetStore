@@ -78,7 +78,7 @@ public static class Config
     ClientName = "Postman PKCE",
     AllowedGrantTypes = GrantTypes.Code,
     RequirePkce = true,
-    RequireClientSecret = false, // public client (đúng kiểu PKCE)
+    RequireClientSecret = false,
 
     RedirectUris = { "https://oauth.pstmn.io/v1/callback" },
     PostLogoutRedirectUris = { "https://oauth.pstmn.io/v1/callback" },
@@ -127,7 +127,35 @@ public static class Config
                     AlwaysIncludeUserClaimsInIdToken = true,
                     AccessTokenLifetime = 60*60*2, // 2 hours
                     IdentityTokenLifetime= 60*60*2 // 2 hours
-                }
+                },
+                new Client
+                {
+                    ClientId = "orderingscalar",
+                    ClientName = "Ordering Scalar UI",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+
+                    //RedirectUris = { $"{configuration["OrderingApiClient"]}/scalar" },
+                    //PostLogoutRedirectUris = { $"{configuration["OrderingApiClient"]}/scalar/" },
+                    RedirectUris = {"https://localhost:5031/scalar/"},
+                    PostLogoutRedirectUris = {"https://localhost:5031/scalar/"},
+                    AllowedCorsOrigins = { "https://localhost:5031" },
+
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "orders",
+                    },
+
+                    AllowOfflineAccess = true,
+                    AllowAccessTokensViaBrowser = true,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AccessTokenLifetime = 60*60*2,
+                    IdentityTokenLifetime= 60*60*2
+                },
 
             ];
     }

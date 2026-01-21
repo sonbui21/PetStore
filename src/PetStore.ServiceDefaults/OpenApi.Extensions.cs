@@ -22,12 +22,30 @@ public static partial class Extensions
 
         if (app.Environment.IsDevelopment())
         {
+            var clientId = openApiSection.GetRequiredSection("Auth").GetSection("ClientId").Value;
+
+            var identitySection = configuration.GetSection("Identity");
+
+            var scopes = identitySection.Exists()
+                ? identitySection.GetRequiredSection("Scopes").GetChildren().ToDictionary(p => p.Key, p => p.Value)
+                : [];
+
             app.MapOpenApi();
             app.MapScalarApiReference(options =>
             {
                 // Disable default fonts to avoid download unnecessary fonts
                 options.DefaultFonts = false;
+
+                options.AddPreferredSecuritySchemes("OAuth2")
+                .AddAuthorizationCodeFlow("OAuth2", flow =>
+                {
+                    flow.ClientId = clientId;
+                    flow.SelectedScopes = [.. scopes.Keys];
+                    flow.Pkce = Pkce.Sha256;
+                });
+
             });
+
             app.MapGet("/", () => Results.Redirect("/scalar")).ExcludeFromDescription();
         }
 
@@ -43,7 +61,19 @@ public static partial class Extensions
             return builder;
         }
 
-        builder.Services.AddOpenApi();
+        var identitySection = builder.Configuration.GetSection("Identity");
+
+        var scopes = identitySection.Exists()
+            ? identitySection.GetRequiredSection("Scopes").GetChildren().ToDictionary(p => p.Key, p => p.Value)
+            : [];
+
+        builder.Services.AddOpenApi("v1", options =>
+        {
+            options.ApplyApiVersionInfo(openApi.GetRequiredValue("Document:Title"), openApi.GetRequiredValue("Document:Description"));
+            options.ApplyAuthorizationChecks([.. scopes.Keys]);
+            options.ApplySecuritySchemeDefinitions();
+            options.ApplyOperationDeprecatedStatus();
+        });
 
         return builder;
     }

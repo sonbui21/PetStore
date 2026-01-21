@@ -1,0 +1,46 @@
+﻿namespace Ordering.Infrastructure.Repositories;
+
+public class BuyerRepository(OrderingContext context) : IBuyerRepository
+{
+    private readonly OrderingContext _context = context ?? throw new ArgumentNullException(nameof(context));
+    public IUnitOfWork UnitOfWork => _context;
+
+    public Buyer Add(Buyer buyer)
+    {
+        if (buyer.IsTransient())
+        {
+            return _context.Buyers
+                .Add(buyer)
+                .Entity;
+        }
+
+        return buyer;
+    }
+
+    public Buyer Update(Buyer buyer)
+    {
+        return _context.Buyers
+                .Update(buyer)
+                .Entity;
+    }
+
+    public async Task<Buyer> FindAsync(string BuyerIdentityGuid)
+    {
+        var buyer = await _context.Buyers
+            .Include(b => b.PaymentMethods)
+            .Where(b => b.IdentityGuid == BuyerIdentityGuid)
+            .SingleOrDefaultAsync();
+
+        return buyer;
+    }
+
+    public async Task<Buyer> FindByIdAsync(int id)
+    {
+        var buyer = await _context.Buyers
+            .Include(b => b.PaymentMethods)
+            .Where(b => b.Id == id)
+            .SingleOrDefaultAsync();
+
+        return buyer;
+    }
+}

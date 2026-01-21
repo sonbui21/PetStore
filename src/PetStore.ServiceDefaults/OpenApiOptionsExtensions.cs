@@ -1,13 +1,103 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning.ApiExplorer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi;
+using System.Text;
 
 namespace PetStore.ServiceDefaults;
 
 internal static class OpenApiOptionsExtensions
 {
+    public static OpenApiOptions ApplyApiVersionInfo(this OpenApiOptions options, string title, string description)
+    {
+        options.AddDocumentTransformer((document, context, cancellationToken) =>
+        {
+            var versionedDescriptionProvider = context.ApplicationServices.GetService<IApiVersionDescriptionProvider>();
+            var apiDescription = versionedDescriptionProvider?.ApiVersionDescriptions
+                .SingleOrDefault(description => description.GroupName == context.DocumentName);
+            if (apiDescription is null)
+            {
+                return Task.CompletedTask;
+            }
+            document.Info.Version = apiDescription.ApiVersion.ToString();
+            document.Info.Title = title;
+            document.Info.Description = BuildDescription(apiDescription, description);
+            return Task.CompletedTask;
+        });
+        return options;
+    }
+
+    private static string BuildDescription(ApiVersionDescription api, string description)
+    {
+        var text = new StringBuilder(description);
+
+        if (api.IsDeprecated)
+        {
+            if (text.Length > 0)
+            {
+                if (text[^1] != '.')
+                {
+                    text.Append('.');
+                }
+
+                text.Append(' ');
+            }
+
+            text.Append("This API version has been deprecated.");
+        }
+
+        if (api.SunsetPolicy is { } policy)
+        {
+            if (policy.Date is { } when)
+            {
+                if (text.Length > 0)
+                {
+                    text.Append(' ');
+                }
+
+                text.Append("The API will be sunset on ")
+                    .Append(when.Date.ToShortDateString())
+                    .Append('.');
+            }
+
+            if (policy.HasLinks)
+            {
+                text.AppendLine();
+
+                var rendered = false;
+
+                foreach (var link in policy.Links.Where(l => l.Type == "text/html"))
+                {
+                    if (!rendered)
+                    {
+                        text.Append("<h4>Links</h4><ul>");
+                        rendered = true;
+                    }
+
+                    text.Append("<li><a href=\"");
+                    text.Append(link.LinkTarget.OriginalString);
+                    text.Append("\">");
+                    text.Append(
+                        StringSegment.IsNullOrEmpty(link.Title)
+                        ? link.LinkTarget.OriginalString
+                        : link.Title.ToString());
+                    text.Append("</a></li>");
+                }
+
+                if (rendered)
+                {
+                    text.Append("</ul>");
+                }
+            }
+        }
+
+        return text.ToString();
+    }
+
     public static OpenApiOptions ApplySecuritySchemeDefinitions(this OpenApiOptions options)
     {
         options.AddDocumentTransformer<SecuritySchemeDefinitionsTransformer>();
@@ -25,19 +115,19 @@ internal static class OpenApiOptionsExtensions
                 return Task.CompletedTask;
             }
 
-            operation.Responses ??= new OpenApiResponses();
+            operation.Responses ??= [];
             operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
             operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
 
             var oAuthScheme = new OpenApiSecuritySchemeReference("oauth2", null);
 
-            operation.Security = new List<OpenApiSecurityRequirement>
-            {
+            operation.Security =
+            [
                 new()
                 {
-                    [oAuthScheme] = scopes.ToList()
+                    [oAuthScheme] = [.. scopes]
                 }
-            };
+            ];
 
             return Task.CompletedTask;
         });
@@ -70,10 +160,9 @@ internal static class OpenApiOptionsExtensions
             var securityScheme = new OpenApiSecurityScheme
             {
                 Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows()
+                Flows = new OpenApiOAuthFlows
                 {
-                    // TODO: Change this to use Authorization Code flow with PKCE
-                    Implicit = new OpenApiOAuthFlow()
+                    AuthorizationCode = new OpenApiOAuthFlow
                     {
                         AuthorizationUrl = new Uri($"{identityUrlExternal}/connect/authorize"),
                         TokenUrl = new Uri($"{identityUrlExternal}/connect/token"),
@@ -81,9 +170,10 @@ internal static class OpenApiOptionsExtensions
                     }
                 }
             };
+
             document.Components ??= new();
             document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
-            document.Components.SecuritySchemes.Add("oauth2", securityScheme);
+            document.Components.SecuritySchemes.Add("OAuth2", securityScheme);
             return Task.CompletedTask;
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace EventBus.RabbitMQ;
+﻿using EventBus.RabbitMQ;
+
+namespace Microsoft.Extensions.Hosting;
 
 public static class RabbitMqDependencyInjectionExtensions
 {

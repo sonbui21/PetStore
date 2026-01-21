@@ -5,6 +5,9 @@
   <Project Path="src/EventBus/EventBus.csproj" Id="6cc2d7b3-d351-4929-9ac5-efd3e3b16272" />
   <Project Path="src/Identity.API/Identity.API.csproj" />
   <Project Path="src/IntegrationEventLogEF/IntegrationEventLogEF.csproj" Id="13770075-3927-4f55-83e9-e3657bca0a31" />
+  <Project Path="src/Ordering.API/Ordering.API.csproj" />
+  <Project Path="src/Ordering.Domain/Ordering.Domain.csproj" Id="eeb22dd2-75e8-496b-960b-ee841ae30e76" />
+  <Project Path="src/Ordering.Infrastructure/Ordering.Infrastructure.csproj" Id="2ed2c859-09e2-4346-a8ca-7adfdc189db8" />
   <Project Path="src/PetStore.AppHost/PetStore.AppHost.csproj" />
   <Project Path="src/PetStore.ServiceDefaults/PetStore.ServiceDefaults.csproj" />
 </Solution>
