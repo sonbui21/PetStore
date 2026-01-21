@@ -18,6 +18,77 @@ public sealed class RabbitMQEventBus(
 
     private IChannel _consumerChannel;
 
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        // Messaging is async so we don't need to wait for it to complete.
+        _ = Task.Factory.StartNew(async () =>
+        {
+            try
+            {
+                logger.LogInformation("Starting RabbitMQ connection on a background thread");
+
+                _rabbitMQConnection = serviceProvider.GetRequiredService<IConnection>();
+                if (!_rabbitMQConnection.IsOpen)
+                {
+                    return;
+                }
+
+                if (logger.IsEnabled(LogLevel.Trace))
+                {
+                    logger.LogTrace("Creating RabbitMQ consumer channel");
+                }
+
+                _consumerChannel = await _rabbitMQConnection.CreateChannelAsync();
+
+                _consumerChannel.CallbackExceptionAsync += (sender, ea) =>
+                {
+                    logger.LogWarning(ea.Exception, "Error with RabbitMQ consumer channel");
+                    return Task.CompletedTask;
+                };
+
+                await _consumerChannel.ExchangeDeclareAsync(
+                    exchange: ExchangeName,
+                    type: "direct");
+
+                await _consumerChannel.QueueDeclareAsync(
+                    queue: _queueName,
+                    durable: true,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
+
+                if (logger.IsEnabled(LogLevel.Trace))
+                {
+                    logger.LogTrace("Starting RabbitMQ basic consume");
+                }
+
+                var consumer = new AsyncEventingBasicConsumer(_consumerChannel);
+
+                consumer.ReceivedAsync += OnMessageReceived;
+
+                await _consumerChannel.BasicConsumeAsync(
+                    queue: _queueName,
+                    autoAck: false,
+                    consumer: consumer);
+
+                foreach (var (eventName, _) in _subscriptionInfo.EventTypes)
+                {
+                    await _consumerChannel.QueueBindAsync(
+                        queue: _queueName,
+                        exchange: ExchangeName,
+                        routingKey: eventName);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error starting RabbitMQ connection");
+            }
+        },
+        TaskCreationOptions.LongRunning);
+
+        return Task.CompletedTask;
+    }
+
     public async Task PublishAsync(IntegrationEvent @event)
     {
         var routingKey = @event.GetType().Name;
@@ -100,19 +171,11 @@ public sealed class RabbitMQEventBus(
         });
     }
 
-    private static void SetActivityContext(Activity activity, string routingKey, string operation)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
-        if (activity is not null)
-        {
-            // These tags are added demonstrating the semantic conventions of the OpenTelemetry messaging specification
-            // https://github.com/open-telemetry/semantic-conventions/blob/main/docs/messaging/messaging-spans.md
-            activity.SetTag("messaging.system", "rabbitmq");
-            activity.SetTag("messaging.destination_kind", "queue");
-            activity.SetTag("messaging.operation", operation);
-            activity.SetTag("messaging.destination.name", routingKey);
-            activity.SetTag("messaging.rabbitmq.routing_key", routingKey);
-        }
+        return Task.CompletedTask;
     }
+
 
     public void Dispose()
     {
@@ -213,82 +276,6 @@ public sealed class RabbitMQEventBus(
         return JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), _subscriptionInfo.JsonSerializerOptions);
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        // Messaging is async so we don't need to wait for it to complete.
-        _ = Task.Factory.StartNew(async () =>
-        {
-            try
-            {
-                logger.LogInformation("Starting RabbitMQ connection on a background thread");
-
-                _rabbitMQConnection = serviceProvider.GetRequiredService<IConnection>();
-                if (!_rabbitMQConnection.IsOpen)
-                {
-                    return;
-                }
-
-                if (logger.IsEnabled(LogLevel.Trace))
-                {
-                    logger.LogTrace("Creating RabbitMQ consumer channel");
-                }
-
-                _consumerChannel = await _rabbitMQConnection.CreateChannelAsync();
-
-                _consumerChannel.CallbackExceptionAsync += (sender, ea) =>
-                {
-                    logger.LogWarning(ea.Exception, "Error with RabbitMQ consumer channel");
-                    return Task.CompletedTask;
-                };
-
-                await _consumerChannel.ExchangeDeclareAsync(
-                    exchange: ExchangeName,
-                    type: "direct");
-
-                await _consumerChannel.QueueDeclareAsync(
-                    queue: _queueName,
-                    durable: true,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
-
-                if (logger.IsEnabled(LogLevel.Trace))
-                {
-                    logger.LogTrace("Starting RabbitMQ basic consume");
-                }
-
-                var consumer = new AsyncEventingBasicConsumer(_consumerChannel);
-
-                consumer.ReceivedAsync += OnMessageReceived;
-
-                await _consumerChannel.BasicConsumeAsync(
-                    queue: _queueName,
-                    autoAck: false,
-                    consumer: consumer);
-
-                foreach (var (eventName, _) in _subscriptionInfo.EventTypes)
-                {
-                    await _consumerChannel.QueueBindAsync(
-                        queue: _queueName,
-                        exchange: ExchangeName,
-                        routingKey: eventName);
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error starting RabbitMQ connection");
-            }
-        },
-        TaskCreationOptions.LongRunning);
-
-        return Task.CompletedTask;
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
-
     private static ResiliencePipeline CreateResiliencePipeline(int retryCount)
     {
         // See https://www.pollydocs.org/strategies/retry.html
@@ -306,6 +293,20 @@ public sealed class RabbitMQEventBus(
         static TimeSpan? GenerateDelay(int attempt)
         {
             return TimeSpan.FromSeconds(Math.Pow(2, attempt));
+        }
+    }
+
+    private static void SetActivityContext(Activity activity, string routingKey, string operation)
+    {
+        if (activity is not null)
+        {
+            // These tags are added demonstrating the semantic conventions of the OpenTelemetry messaging specification
+            // https://github.com/open-telemetry/semantic-conventions/blob/main/docs/messaging/messaging-spans.md
+            activity.SetTag("messaging.system", "rabbitmq");
+            activity.SetTag("messaging.destination_kind", "queue");
+            activity.SetTag("messaging.operation", operation);
+            activity.SetTag("messaging.destination.name", routingKey);
+            activity.SetTag("messaging.rabbitmq.routing_key", routingKey);
         }
     }
 }

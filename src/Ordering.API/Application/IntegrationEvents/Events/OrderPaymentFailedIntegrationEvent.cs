@@ -2,7 +2,7 @@
 
 public record OrderPaymentFailedIntegrationEvent : IntegrationEvent
 {
-    public int OrderId { get; }
+    public Guid OrderId { get; }
 
-    public OrderPaymentFailedIntegrationEvent(int orderId) => OrderId = orderId;
+    public OrderPaymentFailedIntegrationEvent(Guid orderId) => OrderId = orderId;
 }

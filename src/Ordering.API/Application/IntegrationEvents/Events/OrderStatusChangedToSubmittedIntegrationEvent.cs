@@ -2,13 +2,13 @@
 
 public record OrderStatusChangedToSubmittedIntegrationEvent : IntegrationEvent
 {
-    public int OrderId { get; }
+    public Guid OrderId { get; }
     public OrderStatus OrderStatus { get; }
     public string BuyerName { get; }
     public string BuyerIdentityGuid { get; }
 
     public OrderStatusChangedToSubmittedIntegrationEvent(
-        int orderId, OrderStatus orderStatus, string buyerName, string buyerIdentityGuid)
+        Guid orderId, OrderStatus orderStatus, string buyerName, string buyerIdentityGuid)
     {
         OrderId = orderId;
         OrderStatus = orderStatus;

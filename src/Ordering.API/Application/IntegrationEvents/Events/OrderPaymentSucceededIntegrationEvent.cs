@@ -2,7 +2,7 @@
 
 public record OrderPaymentSucceededIntegrationEvent : IntegrationEvent
 {
-    public int OrderId { get; }
+    public Guid OrderId { get; }
 
-    public OrderPaymentSucceededIntegrationEvent(int orderId) => OrderId = orderId;
+    public OrderPaymentSucceededIntegrationEvent(Guid orderId) => OrderId = orderId;
 }

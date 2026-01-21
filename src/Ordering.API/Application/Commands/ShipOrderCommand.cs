@@ -1,3 +1,3 @@
 ﻿namespace Ordering.API.Application.Commands;
 
-public record ShipOrderCommand(int OrderNumber) : IRequest<bool>;
+public record ShipOrderCommand(Guid OrderId) : IRequest<bool>;

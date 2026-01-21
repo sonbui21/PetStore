@@ -53,9 +53,9 @@ public static class Config
 
                     RedirectUris = { $"{configuration["ClientUrls:PetEcommerce"]}/api/auth/callback/identity-service" },
                     PostLogoutRedirectUris =
-{
-    $"{configuration["ClientUrls:PetEcommerce"]}/api/auth/signout"
-},
+                        {
+                            $"{configuration["ClientUrls:PetEcommerce"]}/api/auth/signout"
+                        },
                     AllowedCorsOrigins= { $"{configuration["ClientUrls:PetEcommerce"]}" },
 
                     AllowedScopes =
@@ -73,30 +73,30 @@ public static class Config
                     IdentityTokenLifetime= 60*60*2 // 2 hours
                 },
                 new Client
-{
-    ClientId = "postman-pkce",
-    ClientName = "Postman PKCE",
-    AllowedGrantTypes = GrantTypes.Code,
-    RequirePkce = true,
-    RequireClientSecret = false,
+                {
+                    ClientId = "postman-pkce",
+                    ClientName = "Postman PKCE",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
 
-    RedirectUris = { "https://oauth.pstmn.io/v1/callback" },
-    PostLogoutRedirectUris = { "https://oauth.pstmn.io/v1/callback" },
-    AllowedCorsOrigins = { "https://oauth.pstmn.io" },
+                    RedirectUris = { "https://oauth.pstmn.io/v1/callback" },
+                    PostLogoutRedirectUris = { "https://oauth.pstmn.io/v1/callback" },
+                    AllowedCorsOrigins = { "https://oauth.pstmn.io" },
 
-    AllowedScopes =
-    {
-        IdentityServerConstants.StandardScopes.OpenId,
-        IdentityServerConstants.StandardScopes.Profile,
-        IdentityServerConstants.StandardScopes.OfflineAccess,
-        "orders",
-        "basket",
-    },
-    AllowOfflineAccess = true,
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "orders",
+                        "basket",
+                    },
+                    AllowOfflineAccess = true,
 
-    AccessTokenLifetime = 60 * 60 * 2,
-    IdentityTokenLifetime = 60 * 60 * 2
-},
+                    AccessTokenLifetime = 60 * 60 * 2,
+                    IdentityTokenLifetime = 60 * 60 * 2
+                },
                 new Client
                 {
                     ClientId = "pet-dashboard",

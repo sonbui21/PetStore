@@ -15,7 +15,7 @@ public class SetStockConfirmedOrderStatusCommandHandler(IOrderRepository orderRe
         // Simulate a work time for confirming the stock
         await Task.Delay(10000, cancellationToken);
 
-        var orderToUpdate = await orderRepository.GetAsync(command.OrderNumber);
+        var orderToUpdate = await orderRepository.GetAsync(command.OrderId);
         if (orderToUpdate == null)
         {
             return false;

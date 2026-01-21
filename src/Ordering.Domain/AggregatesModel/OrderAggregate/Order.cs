@@ -8,7 +8,7 @@ public class Order : Entity, IAggregateRoot
     [Required]
     public Address Address { get; private set; }
 
-    public int? BuyerId { get; private set; }
+    public Guid? BuyerId { get; private set; }
 
     public Buyer Buyer { get; }
 
@@ -29,7 +29,7 @@ public class Order : Entity, IAggregateRoot
 
     public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
-    public int? PaymentId { get; private set; }
+    public Guid? PaymentId { get; private set; }
 
     public static Order NewDraft()
     {
@@ -47,7 +47,7 @@ public class Order : Entity, IAggregateRoot
     }
 
     public Order(string userId, string userName, Address address, int cardTypeId, string cardNumber, string cardSecurityNumber,
-            string cardHolderName, DateTime cardExpiration, int? buyerId = null, int? paymentMethodId = null) : this()
+            string cardHolderName, DateTime cardExpiration, Guid? buyerId = null, Guid? paymentMethodId = null) : this()
     {
         BuyerId = buyerId;
         PaymentId = paymentMethodId;
@@ -65,29 +65,23 @@ public class Order : Entity, IAggregateRoot
     // This Order AggregateRoot's method "AddOrderItem()" should be the only way to add Items to the Order,
     // so any behavior (discounts, etc.) and validations are controlled by the AggregateRoot 
     // in order to maintain consistency between the whole Aggregate. 
-    public void AddOrderItem(int productId, string productName, decimal unitPrice, decimal discount, string pictureUrl, int units = 1)
+    public void AddOrderItem(Guid productId, Guid variantId, string title, string slug, string thumbnail, decimal price, int quantity = 1)
     {
         var existingOrderForProduct = _orderItems.SingleOrDefault(o => o.ProductId == productId);
 
         if (existingOrderForProduct != null)
         {
-            //if previous line exist modify it with higher discount  and units..
-            if (discount > existingOrderForProduct.Discount)
-            {
-                existingOrderForProduct.SetNewDiscount(discount);
-            }
-
-            existingOrderForProduct.AddUnits(units);
+            existingOrderForProduct.AddQuantity(quantity);
         }
         else
         {
             //add validated new order item
-            var orderItem = new OrderItem(productId, productName, unitPrice, discount, pictureUrl, units);
+            var orderItem = new OrderItem(productId, variantId, title, slug, thumbnail, price, quantity);
             _orderItems.Add(orderItem);
         }
     }
 
-    public void SetPaymentMethodVerified(int buyerId, int paymentId)
+    public void SetPaymentMethodVerified(Guid buyerId, Guid paymentId)
     {
         BuyerId = buyerId;
         PaymentId = paymentId;
@@ -149,7 +143,7 @@ public class Order : Entity, IAggregateRoot
         AddDomainEvent(new OrderCancelledDomainEvent(this));
     }
 
-    public void SetCancelledStatusWhenStockIsRejected(IEnumerable<int> orderStockRejectedItems)
+    public void SetCancelledStatusWhenStockIsRejected(IEnumerable<Guid> orderStockRejectedItems)
     {
         if (OrderStatus == OrderStatus.AwaitingValidation)
         {
@@ -157,7 +151,7 @@ public class Order : Entity, IAggregateRoot
 
             var itemsStockRejectedProductNames = OrderItems
                 .Where(c => orderStockRejectedItems.Contains(c.ProductId))
-                .Select(c => c.ProductName);
+                .Select(c => c.Title);
 
             var itemsStockRejectedDescription = string.Join(", ", itemsStockRejectedProductNames);
             Description = $"The product items don't have stock: ({itemsStockRejectedDescription}).";
@@ -179,6 +173,6 @@ public class Order : Entity, IAggregateRoot
         throw new OrderingDomainException($"Is not possible to change the order status from {OrderStatus} to {orderStatusToChange}.");
     }
 
-    public decimal GetTotal() => _orderItems.Sum(o => o.Units * o.UnitPrice);
+    public decimal GetTotal() => _orderItems.Sum(o => o.Quantity * o.Price);
 }
 

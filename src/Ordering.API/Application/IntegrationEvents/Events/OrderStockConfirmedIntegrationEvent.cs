@@ -2,7 +2,7 @@
 
 public record OrderStockConfirmedIntegrationEvent : IntegrationEvent
 {
-    public int OrderId { get; }
+    public Guid OrderId { get; }
 
-    public OrderStockConfirmedIntegrationEvent(int orderId) => OrderId = orderId;
+    public OrderStockConfirmedIntegrationEvent(Guid orderId) => OrderId = orderId;
 }

@@ -8,9 +8,6 @@ class BuyerEntityTypeConfiguration : IEntityTypeConfiguration<Buyer>
 
         buyerConfiguration.Ignore(b => b.DomainEvents);
 
-        buyerConfiguration.Property(b => b.Id)
-            .UseHiLo("buyerseq");
-
         buyerConfiguration.Property(b => b.IdentityGuid)
             .HasMaxLength(200);
 

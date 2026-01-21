@@ -14,8 +14,8 @@ public class OrderStockConfirmedIntegrationEventHandler(
         logger.LogInformation(
             "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
             command.GetGenericTypeName(),
-            nameof(command.OrderNumber),
-            command.OrderNumber,
+            nameof(command.OrderId),
+            command.OrderId,
             command);
 
         await mediator.Send(command);

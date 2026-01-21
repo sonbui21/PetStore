@@ -9,11 +9,13 @@
 // http://blog.gauffin.org/2012/06/griffin-container-introducing-command-support/
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/how-to-implement-a-lightweight-class-with-auto-implemented-properties
 [DataContract]
-public class CreateOrderCommand
-    : IRequest<bool>
+public class CreateOrderCommand : IRequest<bool>
 {
     [DataMember]
     private readonly List<OrderItemDto> _orderItems;
+
+    [DataMember]
+    public Guid OrderId { get; private set; }
 
     [DataMember]
     public string UserId { get; private set; }
@@ -59,11 +61,12 @@ public class CreateOrderCommand
         _orderItems = [];
     }
 
-    public CreateOrderCommand(List<BasketItem> basketItems, string userId, string userName, string city, string street, string state, string country,   
+    public CreateOrderCommand(List<BasketItem> basketItems, Guid orderId, string userId, string userName, string city, string street, string state, string country,   
         string zipcode, string cardNumber, string cardHolderName, DateTime cardExpiration,
         string cardSecurityNumber, int cardTypeId)
     {
-        _orderItems = [.. basketItems.ToOrderItemsDTO()];
+        _orderItems = [.. basketItems.ToOrderItemsDto()];
+        OrderId = orderId;
         UserId = userId;
         UserName = userName;
         City = city;

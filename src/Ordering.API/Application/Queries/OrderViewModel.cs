@@ -2,15 +2,19 @@
 
 public record OrderItem
 {
-    public string ProductName { get; init; }
-    public int Units { get; init; }
-    public double UnitPrice { get; init; }
-    public string PictureUrl { get; init; }
+    public Guid ProductId { get; set; }
+    public Guid VariantId { get; set; }
+    public int Quantity { get; set; }
+
+    public string Title { get; set; }
+    public string Slug { get; set; }
+    public string Thumbnail { get; set; }
+    public decimal Price { get; set; }
 }
 
 public record Order
 {
-    public int OrderNumber { get; init; }
+    public Guid OrderId { get; init; }
     public DateTime Date { get; init; }
     public string Status { get; init; }
     public string Description { get; init; }
@@ -25,7 +29,7 @@ public record Order
 
 public record OrderSummary
 {
-    public int OrderNumber { get; init; }
+    public Guid OrderId { get; init; }
     public DateTime Date { get; init; }
     public string Status { get; init; }
     public double Total { get; init; }

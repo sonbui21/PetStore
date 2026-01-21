@@ -2,11 +2,13 @@
 
 public class BasketItem
 {
-    public string Id { get; init; }
-    public int ProductId { get; init; }
-    public string ProductName { get; init; }
-    public decimal UnitPrice { get; init; }
-    public decimal OldUnitPrice { get; init; }
-    public int Quantity { get; init; }
-    public string PictureUrl { get; init; }
+    public Guid ProductId { get; set; }
+    public Guid VariantId { get; set; }
+    public int Quantity { get; set; }
+
+    public string Title { get; set; }
+    public string Slug { get; set; }
+    public string Thumbnail { get; set; }
+
+    public decimal Price { get; set; }
 }

@@ -2,13 +2,13 @@
 
 public record OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
 {
-    public int OrderId { get; }
+    public Guid OrderId { get; }
     public OrderStatus OrderStatus { get; }
     public string BuyerName { get; }
     public string BuyerIdentityGuid { get; }
     public IEnumerable<OrderStockItem> OrderStockItems { get; }
 
-    public OrderStatusChangedToPaidIntegrationEvent(int orderId,
+    public OrderStatusChangedToPaidIntegrationEvent(Guid orderId,
         OrderStatus orderStatus, string buyerName, string buyerIdentityGuid,
         IEnumerable<OrderStockItem> orderStockItems)
     {

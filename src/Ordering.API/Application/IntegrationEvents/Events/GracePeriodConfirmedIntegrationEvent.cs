@@ -2,8 +2,8 @@
 
 public record GracePeriodConfirmedIntegrationEvent : IntegrationEvent
 {
-    public int OrderId { get; }
+    public Guid OrderId { get; }
 
-    public GracePeriodConfirmedIntegrationEvent(int orderId) =>
+    public GracePeriodConfirmedIntegrationEvent(Guid orderId) =>
         OrderId = orderId;
 }

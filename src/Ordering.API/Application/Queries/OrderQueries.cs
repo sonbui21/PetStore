@@ -2,7 +2,7 @@
 
 public class OrderQueries(OrderingContext context) : IOrderQueries
 {
-    public async Task<Order> GetOrderAsync(int id)
+    public async Task<Order> GetOrderAsync(Guid id)
     {
         var order = await context.Orders
             .Include(o => o.OrderItems)
@@ -10,7 +10,7 @@ public class OrderQueries(OrderingContext context) : IOrderQueries
 
         return new Order
         {
-            OrderNumber = order.Id,
+            OrderId = order.Id,
             Date = order.OrderDate,
             Description = order.Description,
             City = order.Address.City,
@@ -20,13 +20,16 @@ public class OrderQueries(OrderingContext context) : IOrderQueries
             Zipcode = order.Address.ZipCode,
             Status = order.OrderStatus.ToString(),
             Total = order.GetTotal(),
-            OrderItems = order.OrderItems.Select(oi => new OrderItem
+            OrderItems = [.. order.OrderItems.Select(oi => new OrderItem
             {
-                ProductName = oi.ProductName,
-                Units = oi.Units,
-                UnitPrice = (double)oi.UnitPrice,
-                PictureUrl = oi.PictureUrl
-            }).ToList()
+                ProductId = oi.ProductId,
+                VariantId = oi.VariantId,
+                Quantity = oi.Quantity,
+                Title = oi.Title,
+                Slug = oi.Slug,
+                Thumbnail = oi.Thumbnail,
+                Price = oi.Price
+            })]
         };
     }
 
@@ -36,10 +39,10 @@ public class OrderQueries(OrderingContext context) : IOrderQueries
             .Where(o => o.Buyer.IdentityGuid == userId)
             .Select(o => new OrderSummary
             {
-                OrderNumber = o.Id,
+                OrderId = o.Id,
                 Date = o.OrderDate,
                 Status = o.OrderStatus.ToString(),
-                Total = (double)o.OrderItems.Sum(oi => oi.UnitPrice * oi.Units)
+                Total = (double)o.OrderItems.Sum(oi => oi.Price * oi.Quantity)
             })
             .ToListAsync();
     }

@@ -15,7 +15,7 @@ public class SetStockRejectedOrderStatusCommandHandler(IOrderRepository orderRep
         // Simulate a work time for rejecting the stock
         await Task.Delay(10000, cancellationToken);
 
-        var orderToUpdate = await orderRepository.GetAsync(command.OrderNumber);
+        var orderToUpdate = await orderRepository.GetAsync(command.OrderId);
         if (orderToUpdate == null)
         {
             return false;

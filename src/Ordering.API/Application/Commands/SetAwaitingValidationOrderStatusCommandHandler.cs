@@ -12,7 +12,7 @@ public class SetAwaitingValidationOrderStatusCommandHandler(IOrderRepository ord
     /// <returns></returns>
     public async Task<bool> Handle(SetAwaitingValidationOrderStatusCommand command, CancellationToken cancellationToken)
     {
-        var orderToUpdate = await orderRepository.GetAsync(command.OrderNumber);
+        var orderToUpdate = await orderRepository.GetAsync(command.OrderId);
         if (orderToUpdate == null)
         {
             return false;

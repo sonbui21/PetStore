@@ -2,11 +2,11 @@
 
 public record OrderStockRejectedIntegrationEvent : IntegrationEvent
 {
-    public int OrderId { get; }
+    public Guid OrderId { get; }
 
     public List<ConfirmedOrderStockItem> OrderStockItems { get; }
 
-    public OrderStockRejectedIntegrationEvent(int orderId,
+    public OrderStockRejectedIntegrationEvent(Guid orderId,
         List<ConfirmedOrderStockItem> orderStockItems)
     {
         OrderId = orderId;
@@ -16,10 +16,10 @@ public record OrderStockRejectedIntegrationEvent : IntegrationEvent
 
 public record ConfirmedOrderStockItem
 {
-    public int ProductId { get; }
+    public Guid ProductId { get; }
     public bool HasStock { get; }
 
-    public ConfirmedOrderStockItem(int productId, bool hasStock)
+    public ConfirmedOrderStockItem(Guid productId, bool hasStock)
     {
         ProductId = productId;
         HasStock = hasStock;

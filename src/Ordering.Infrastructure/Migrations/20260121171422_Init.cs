@@ -14,32 +14,12 @@ namespace Ordering.Infrastructure.Migrations
             migrationBuilder.EnsureSchema(
                 name: "ordering");
 
-            migrationBuilder.CreateSequence(
-                name: "buyerseq",
-                schema: "ordering",
-                incrementBy: 10);
-
-            migrationBuilder.CreateSequence(
-                name: "orderitemseq",
-                schema: "ordering",
-                incrementBy: 10);
-
-            migrationBuilder.CreateSequence(
-                name: "orderseq",
-                schema: "ordering",
-                incrementBy: 10);
-
-            migrationBuilder.CreateSequence(
-                name: "paymentseq",
-                schema: "ordering",
-                incrementBy: 10);
-
             migrationBuilder.CreateTable(
                 name: "buyers",
                 schema: "ordering",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     IdentityGuid = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true)
                 },
@@ -98,9 +78,9 @@ namespace Ordering.Infrastructure.Migrations
                 schema: "ordering",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CardTypeId = table.Column<int>(type: "integer", nullable: false),
-                    BuyerId = table.Column<int>(type: "integer", nullable: false),
+                    BuyerId = table.Column<Guid>(type: "uuid", nullable: false),
                     Alias = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     CardHolderName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     CardNumber = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false),
@@ -130,17 +110,17 @@ namespace Ordering.Infrastructure.Migrations
                 schema: "ordering",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Address_Street = table.Column<string>(type: "text", nullable: true),
                     Address_City = table.Column<string>(type: "text", nullable: true),
                     Address_State = table.Column<string>(type: "text", nullable: true),
                     Address_Country = table.Column<string>(type: "text", nullable: true),
                     Address_ZipCode = table.Column<string>(type: "text", nullable: true),
-                    BuyerId = table.Column<int>(type: "integer", nullable: true),
+                    BuyerId = table.Column<Guid>(type: "uuid", nullable: true),
                     OrderStatus = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    PaymentMethodId = table.Column<int>(type: "integer", nullable: true)
+                    PaymentMethodId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -165,14 +145,15 @@ namespace Ordering.Infrastructure.Migrations
                 schema: "ordering",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    ProductName = table.Column<string>(type: "text", nullable: false),
-                    PictureUrl = table.Column<string>(type: "text", nullable: true),
-                    UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
-                    Discount = table.Column<decimal>(type: "numeric", nullable: false),
-                    Units = table.Column<int>(type: "integer", nullable: false),
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    OrderId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    VariantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Slug = table.Column<string>(type: "text", nullable: true),
+                    Thumbnail = table.Column<string>(type: "text", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -253,22 +234,6 @@ namespace Ordering.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "cardtypes",
-                schema: "ordering");
-
-            migrationBuilder.DropSequence(
-                name: "buyerseq",
-                schema: "ordering");
-
-            migrationBuilder.DropSequence(
-                name: "orderitemseq",
-                schema: "ordering");
-
-            migrationBuilder.DropSequence(
-                name: "orderseq",
-                schema: "ordering");
-
-            migrationBuilder.DropSequence(
-                name: "paymentseq",
                 schema: "ordering");
         }
     }

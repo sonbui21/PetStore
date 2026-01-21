@@ -8,10 +8,7 @@ class PaymentMethodEntityTypeConfiguration : IEntityTypeConfiguration<PaymentMet
 
         paymentConfiguration.Ignore(b => b.DomainEvents);
 
-        paymentConfiguration.Property(b => b.Id)
-            .UseHiLo("paymentseq");
-
-        paymentConfiguration.Property<int>("BuyerId");
+        paymentConfiguration.Property<Guid>("BuyerId");
 
         paymentConfiguration
             .Property("_cardHolderName")

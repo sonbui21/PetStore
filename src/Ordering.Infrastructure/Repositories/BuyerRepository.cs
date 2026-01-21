@@ -34,7 +34,7 @@ public class BuyerRepository(OrderingContext context) : IBuyerRepository
         return buyer;
     }
 
-    public async Task<Buyer> FindByIdAsync(int id)
+    public async Task<Buyer> FindByIdAsync(Guid id)
     {
         var buyer = await _context.Buyers
             .Include(b => b.PaymentMethods)

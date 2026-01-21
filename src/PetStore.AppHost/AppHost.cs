@@ -5,7 +5,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 builder.AddForwardedHeaders();
 
-var redis = builder.AddRedis("redis");
+//var redis = builder.AddRedis("redis");
 var rabbitMq = builder.AddRabbitMQ("eventbus")
     .WithLifetime(ContainerLifetime.Persistent);
 
@@ -21,10 +21,10 @@ var catalogApi = builder.AddProject<Projects.Catalog_API>("catalog-api")
     .WithReference(rabbitMq).WaitFor(rabbitMq);
 
 var basketApi = builder.AddProject<Projects.Basket_API>("basket-api")
-    .WithReference(redis)
+    //.WithReference(redis)
     .WithReference(rabbitMq).WaitFor(rabbitMq)
     .WithEnvironment("Identity__Url", identityEndpoint);
-redis.WithParentRelationship(basketApi);
+//redis.WithParentRelationship(basketApi);
 
 var orderingApi = builder.AddProject<Projects.Ordering_API>("ordering-api")
     .WithReference(rabbitMq).WaitFor(rabbitMq)

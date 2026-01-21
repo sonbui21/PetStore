@@ -3,7 +3,7 @@
 /// <summary>
 /// Event used when the order stock items are confirmed
 /// </summary>
-public class OrderStatusChangedToStockConfirmedDomainEvent(int orderId) : INotification
+public class OrderStatusChangedToStockConfirmedDomainEvent(Guid orderId) : INotification
 {
-    public int OrderId { get; } = orderId;
+    public Guid OrderId { get; } = orderId;
 }

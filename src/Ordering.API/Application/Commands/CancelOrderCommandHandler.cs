@@ -12,7 +12,7 @@ public class CancelOrderCommandHandler(IOrderRepository orderRepository) : IRequ
     /// <returns></returns>
     public async Task<bool> Handle(CancelOrderCommand command, CancellationToken cancellationToken)
     {
-        var orderToUpdate = await orderRepository.GetAsync(command.OrderNumber);
+        var orderToUpdate = await orderRepository.GetAsync(command.OrderId);
         if (orderToUpdate == null)
         {
             return false;

@@ -61,13 +61,13 @@ public abstract class IdentifiedCommandHandler<T, R> : IRequestHandler<Identifie
                         break;
 
                     case CancelOrderCommand cancelOrderCommand:
-                        idProperty = nameof(cancelOrderCommand.OrderNumber);
-                        commandId = $"{cancelOrderCommand.OrderNumber}";
+                        idProperty = nameof(cancelOrderCommand.OrderId);
+                        commandId = $"{cancelOrderCommand.OrderId}";
                         break;
 
                     case ShipOrderCommand shipOrderCommand:
-                        idProperty = nameof(shipOrderCommand.OrderNumber);
-                        commandId = $"{shipOrderCommand.OrderNumber}";
+                        idProperty = nameof(shipOrderCommand.OrderId);
+                        commandId = $"{shipOrderCommand.OrderId}";
                         break;
 
                     default:

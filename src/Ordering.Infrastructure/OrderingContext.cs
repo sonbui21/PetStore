@@ -1,4 +1,6 @@
-﻿namespace Ordering.Infrastructure;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Ordering.Infrastructure;
 
 /// <remarks>
 /// Add migrations using the following command inside the 'Ordering.Infrastructure' project directory:
@@ -25,9 +27,6 @@ public class OrderingContext : DbContext, IUnitOfWork
     public OrderingContext(DbContextOptions<OrderingContext> options, IMediator mediator) : base(options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
-
-        System.Diagnostics.Debug.WriteLine("OrderingContext::ctor ->" + this.GetHashCode());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,7 +69,8 @@ public class OrderingContext : DbContext, IUnitOfWork
 
     public async Task CommitTransactionAsync(IDbContextTransaction transaction)
     {
-        if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+        ArgumentNullException.ThrowIfNull(transaction);
+
         if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
 
         try

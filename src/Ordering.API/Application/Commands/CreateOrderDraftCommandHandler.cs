@@ -12,7 +12,7 @@ public class CreateOrderDraftCommandHandler
         var orderItems = message.Items.Select(i => i.ToOrderItemDto());
         foreach (var item in orderItems)
         {
-            order.AddOrderItem(item.ProductId, item.ProductName, item.UnitPrice, item.Discount, item.PictureUrl, item.Units);
+            order.AddOrderItem(item.ProductId, item.VariantId, item.Title, item.Slug, item.Thumbnail, item.Price, item.Quantity);
         }
 
         return Task.FromResult(OrderDraftDto.FromOrder(order));
@@ -30,12 +30,13 @@ public record OrderDraftDto
         {
             OrderItems = order.OrderItems.Select(oi => new OrderItemDto
             {
-                Discount = oi.Discount,
                 ProductId = oi.ProductId,
-                UnitPrice = oi.UnitPrice,
-                PictureUrl = oi.PictureUrl,
-                Units = oi.Units,
-                ProductName = oi.ProductName
+                VariantId = oi.VariantId,
+                Quantity = oi.Quantity,
+                Title = oi.Title,
+                Slug = oi.Slug,
+                Thumbnail = oi.Thumbnail,
+                Price = oi.Price,
             }),
             Total = order.GetTotal()
         };
@@ -44,15 +45,12 @@ public record OrderDraftDto
 
 public record OrderItemDto
 {
-    public int ProductId { get; init; }
+    public Guid ProductId { get; set; }
+    public Guid VariantId { get; set; }
+    public int Quantity { get; set; }
 
-    public string ProductName { get; init; }
-
-    public decimal UnitPrice { get; init; }
-
-    public decimal Discount { get; init; }
-
-    public int Units { get; init; }
-
-    public string PictureUrl { get; init; }
+    public string Title { get; set; }
+    public string Slug { get; set; }
+    public string Thumbnail { get; set; }
+    public decimal Price { get; set; }
 }

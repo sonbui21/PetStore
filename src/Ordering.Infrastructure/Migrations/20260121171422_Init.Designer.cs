@@ -12,7 +12,7 @@ using Ordering.Infrastructure;
 namespace Ordering.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20260121065750_Init")]
+    [Migration("20260121171422_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -25,18 +25,6 @@ namespace Ordering.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.HasSequence("buyerseq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("orderitemseq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("orderseq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("paymentseq")
-                .IncrementsBy(10);
 
             modelBuilder.Entity("IntegrationEventLogEF.IntegrationEventLogEntry", b =>
                 {
@@ -71,11 +59,9 @@ namespace Ordering.Infrastructure.Migrations
 
             modelBuilder.Entity("Ordering.Domain.AggregatesModel.BuyerAggregate.Buyer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "buyerseq");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("IdentityGuid")
                         .IsRequired()
@@ -110,14 +96,12 @@ namespace Ordering.Infrastructure.Migrations
 
             modelBuilder.Entity("Ordering.Domain.AggregatesModel.BuyerAggregate.PaymentMethod", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "paymentseq");
-
-                    b.Property<int>("BuyerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("BuyerId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("_alias")
                         .IsRequired()
@@ -157,14 +141,12 @@ namespace Ordering.Infrastructure.Migrations
 
             modelBuilder.Entity("Ordering.Domain.AggregatesModel.OrderAggregate.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "orderseq");
-
-                    b.Property<int?>("BuyerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("BuyerId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -177,8 +159,8 @@ namespace Ordering.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
-                    b.Property<int?>("PaymentId")
-                        .HasColumnType("integer")
+                    b.Property<Guid?>("PaymentId")
+                        .HasColumnType("uuid")
                         .HasColumnName("PaymentMethodId");
 
                     b.HasKey("Id");
@@ -192,33 +174,33 @@ namespace Ordering.Infrastructure.Migrations
 
             modelBuilder.Entity("Ordering.Domain.AggregatesModel.OrderAggregate.OrderItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "orderitemseq");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
 
-                    b.Property<decimal>("Discount")
+                    b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("OrderId")
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<string>("PictureUrl")
+                    b.Property<string>("Slug")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
+                    b.Property<string>("Thumbnail")
                         .HasColumnType("text");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("numeric");
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
 
-                    b.Property<int>("Units")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("VariantId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -275,8 +257,8 @@ namespace Ordering.Infrastructure.Migrations
 
                     b.OwnsOne("Ordering.Domain.AggregatesModel.OrderAggregate.Address", "Address", b1 =>
                         {
-                            b1.Property<int>("OrderId")
-                                .HasColumnType("integer");
+                            b1.Property<Guid>("OrderId")
+                                .HasColumnType("uuid");
 
                             b1.Property<string>("City")
                                 .HasColumnType("text");

@@ -12,7 +12,7 @@ public class ShipOrderCommandHandler(IOrderRepository orderRepository) : IReques
     /// <returns></returns>
     public async Task<bool> Handle(ShipOrderCommand command, CancellationToken cancellationToken)
     {
-        var orderToUpdate = await orderRepository.GetAsync(command.OrderNumber);
+        var orderToUpdate = await orderRepository.GetAsync(command.OrderId);
         if (orderToUpdate == null)
         {
             return false;

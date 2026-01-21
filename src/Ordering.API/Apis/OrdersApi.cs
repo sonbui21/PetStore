@@ -14,89 +14,10 @@ public static class OrdersApi
         api.MapGet("/", GetOrdersByUserAsync);
 
         api.MapPost("/", CreateOrderAsync);
-        api.MapPost("/draft", CreateOrderDraftAsync);
 
-        api.MapGet("{orderId:int}", GetOrderAsync);
-
-        api.MapPut("/cancel", CancelOrderAsync);
-        api.MapPut("/ship", ShipOrderAsync);
-
-        api.MapGet("/cardtypes", GetCardTypesAsync);
-
-
+        api.MapGet("{orderId:guid}", GetOrderAsync);
 
         return api;
-    }
-
-    public static async Task<Results<Ok, BadRequest<string>, ProblemHttpResult>> CancelOrderAsync(
-        [FromHeader(Name = "x-requestid")] Guid requestId,
-        CancelOrderCommand command,
-        [AsParameters] OrderServices services)
-    {
-        if (requestId == Guid.Empty)
-        {
-            return TypedResults.BadRequest("Empty GUID is not valid for request ID");
-        }
-
-        var requestCancelOrder = new IdentifiedCommand<CancelOrderCommand, bool>(command, requestId);
-
-        services.Logger.LogInformation(
-            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-            requestCancelOrder.GetGenericTypeName(),
-            nameof(requestCancelOrder.Command.OrderNumber),
-            requestCancelOrder.Command.OrderNumber,
-            requestCancelOrder);
-
-        var commandResult = await services.Mediator.Send(requestCancelOrder);
-
-        if (!commandResult)
-        {
-            return TypedResults.Problem(detail: "Cancel order failed to process.", statusCode: 500);
-        }
-
-        return TypedResults.Ok();
-    }
-
-    public static async Task<Results<Ok, BadRequest<string>, ProblemHttpResult>> ShipOrderAsync(
-        [FromHeader(Name = "x-requestid")] Guid requestId,
-        ShipOrderCommand command,
-        [AsParameters] OrderServices services)
-    {
-        if (requestId == Guid.Empty)
-        {
-            return TypedResults.BadRequest("Empty GUID is not valid for request ID");
-        }
-
-        var requestShipOrder = new IdentifiedCommand<ShipOrderCommand, bool>(command, requestId);
-
-        services.Logger.LogInformation(
-            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-            requestShipOrder.GetGenericTypeName(),
-            nameof(requestShipOrder.Command.OrderNumber),
-            requestShipOrder.Command.OrderNumber,
-            requestShipOrder);
-
-        var commandResult = await services.Mediator.Send(requestShipOrder);
-
-        if (!commandResult)
-        {
-            return TypedResults.Problem(detail: "Ship order failed to process.", statusCode: 500);
-        }
-
-        return TypedResults.Ok();
-    }
-
-    public static async Task<Results<Ok<Order>, NotFound>> GetOrderAsync(int orderId, [AsParameters] OrderServices services)
-    {
-        try
-        {
-            var order = await services.Queries.GetOrderAsync(orderId);
-            return TypedResults.Ok(order);
-        }
-        catch
-        {
-            return TypedResults.NotFound();
-        }
     }
 
     public static async Task<Ok<IEnumerable<OrderSummary>>> GetOrdersByUserAsync([AsParameters] OrderServices services)
@@ -106,30 +27,11 @@ public static class OrdersApi
         return TypedResults.Ok(orders);
     }
 
-    public static async Task<Ok<IEnumerable<CardType>>> GetCardTypesAsync(IOrderQueries orderQueries)
-    {
-        var cardTypes = await orderQueries.GetCardTypesAsync();
-        return TypedResults.Ok(cardTypes);
-    }
-
-    public static async Task<OrderDraftDto> CreateOrderDraftAsync(CreateOrderDraftCommand command, [AsParameters] OrderServices services)
-    {
-        services.Logger.LogInformation(
-            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-            command.GetGenericTypeName(),
-            nameof(command.BuyerId),
-            command.BuyerId,
-            command);
-
-        return await services.Mediator.Send(command);
-    }
-
-    public static async Task<Results<Ok, BadRequest<string>>> CreateOrderAsync(
+    public static async Task<Results<Ok<CreateOrderResponse>, BadRequest<string>>> CreateOrderAsync(
         [FromHeader(Name = "x-requestid")] Guid requestId,
         CreateOrderRequest request,
         [AsParameters] OrderServices services)
     {
-
         //mask the credit card number
 
         services.Logger.LogInformation(
@@ -146,8 +48,11 @@ public static class OrdersApi
 
         using (services.Logger.BeginScope(new List<KeyValuePair<string, object>> { new("IdentifiedCommandId", requestId) }))
         {
-            var maskedCCNumber = request.CardNumber.Substring(request.CardNumber.Length - 4).PadLeft(request.CardNumber.Length, 'X');
-            var createOrderCommand = new CreateOrderCommand(request.Items, request.UserId, request.UserName, request.City, request.Street,
+            var maskedCCNumber = request.CardNumber[^4..].PadLeft(request.CardNumber.Length, 'X');
+
+            var orderId = Guid.NewGuid();
+
+            var createOrderCommand = new CreateOrderCommand(request.Items, orderId, request.UserId, request.UserName, request.City, request.Street,
                 request.State, request.Country, request.ZipCode,
                 maskedCCNumber, request.CardHolderName, request.CardExpiration,
                 request.CardSecurityNumber, request.CardTypeId);
@@ -172,7 +77,20 @@ public static class OrdersApi
                 services.Logger.LogWarning("CreateOrderCommand failed - RequestId: {RequestId}", requestId);
             }
 
-            return TypedResults.Ok();
+            return TypedResults.Ok(new CreateOrderResponse(OrderId: orderId, Status: "Created"));
+        }
+    }
+
+    public static async Task<Results<Ok<Order>, NotFound>> GetOrderAsync(Guid orderId, [AsParameters] OrderServices services)
+    {
+        try
+        {
+            var order = await services.Queries.GetOrderAsync(orderId);
+            return TypedResults.Ok(order);
+        }
+        catch
+        {
+            return TypedResults.NotFound();
         }
     }
 }
@@ -193,3 +111,7 @@ public record CreateOrderRequest(
     string Buyer,
     List<BasketItem> Items);
 
+public record CreateOrderResponse(
+    Guid OrderId,
+    string Status
+);

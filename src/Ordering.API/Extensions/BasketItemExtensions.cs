@@ -2,7 +2,7 @@
 
 public static class BasketItemExtensions
 {
-    public static IEnumerable<OrderItemDto> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems)
+    public static IEnumerable<OrderItemDto> ToOrderItemsDto(this IEnumerable<BasketItem> basketItems)
     {
         foreach (var item in basketItems)
         {
@@ -15,10 +15,12 @@ public static class BasketItemExtensions
         return new OrderItemDto()
         {
             ProductId = item.ProductId,
-            ProductName = item.ProductName,
-            PictureUrl = item.PictureUrl,
-            UnitPrice = item.UnitPrice,
-            Units = item.Quantity
+            VariantId = item.VariantId,
+            Quantity = item.Quantity,
+            Title = item.Title,
+            Slug = item.Slug,
+            Thumbnail = item.Thumbnail,
+            Price = item.Price
         };
     }
 }
