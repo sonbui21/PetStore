@@ -1,4 +1,6 @@
-﻿namespace Basket.API.Extensions;
+﻿using Basket.API.IntegrationEvents;
+
+namespace Basket.API.Extensions;
 
 public static class Extensions
 {

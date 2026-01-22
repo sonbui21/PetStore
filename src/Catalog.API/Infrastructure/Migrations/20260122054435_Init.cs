@@ -21,7 +21,6 @@ namespace Catalog.API.Infrastructure.Migrations
                     Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     CurrencyCode = table.Column<string>(type: "text", nullable: true),
-                    AvailableStock = table.Column<int>(type: "integer", nullable: false),
                     Images = table.Column<List<string>>(type: "text[]", nullable: true)
                 },
                 constraints: table =>
@@ -42,6 +41,23 @@ namespace Catalog.API.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IntegrationEventLog",
+                columns: table => new
+                {
+                    EventId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EventTypeName = table.Column<string>(type: "text", nullable: false),
+                    State = table.Column<int>(type: "integer", nullable: false),
+                    TimesSent = table.Column<int>(type: "integer", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    TransactionId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IntegrationEventLog", x => x.EventId);
                 });
 
             migrationBuilder.CreateTable(
@@ -162,6 +178,12 @@ namespace Catalog.API.Infrastructure.Migrations
                 column: "CatalogItemId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ItemVariant_CatalogItemId_Title",
+                table: "ItemVariant",
+                columns: new[] { "CatalogItemId", "Title" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ItemVariantOption_ItemVariantId_Name",
                 table: "ItemVariantOption",
                 columns: new[] { "ItemVariantId", "Name" });
@@ -172,6 +194,9 @@ namespace Catalog.API.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "CatalogItemCategory");
+
+            migrationBuilder.DropTable(
+                name: "IntegrationEventLog");
 
             migrationBuilder.DropTable(
                 name: "ItemOption");

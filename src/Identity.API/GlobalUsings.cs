@@ -9,7 +9,6 @@ global using Identity.API.Configuration;
 global using Identity.API.Controllers.Account;
 global using Identity.API.Data;
 global using Identity.API.Extensions;
-global using Identity.API.Infrastructure;
 global using Identity.API.Models;
 global using Identity.API.Services;
 global using Microsoft.AspNetCore.Authentication;

@@ -1,4 +1,4 @@
-﻿namespace Identity.API.Infrastructure;
+﻿namespace Identity.API.Extensions;
 
 public static class Extensions
 {

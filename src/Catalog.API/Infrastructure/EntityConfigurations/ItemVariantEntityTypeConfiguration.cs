@@ -8,6 +8,9 @@ class ItemVariantEntityTypeConfiguration : IEntityTypeConfiguration<ItemVariant>
 
         builder.HasKey(v => v.Id);
 
+        builder.HasIndex(v => new { v.CatalogItemId, v.Title })
+            .IsUnique();
+
         builder.Property(v => v.Title)
             .IsRequired()
             .HasMaxLength(256);

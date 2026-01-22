@@ -1,3 +1,3 @@
 ﻿namespace Catalog.API.IntegrationEvents.Events;
 
-public record OrderStockItem(int ProductId, int Units);
+public record OrderStockItem(Guid ProductId, Guid VariantId, int Quantity);

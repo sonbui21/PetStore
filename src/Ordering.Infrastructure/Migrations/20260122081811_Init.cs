@@ -111,15 +111,15 @@ namespace Ordering.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BuyerId = table.Column<Guid>(type: "uuid", nullable: true),
                     OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    OrderStatus = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     Address_Street = table.Column<string>(type: "text", nullable: true),
                     Address_City = table.Column<string>(type: "text", nullable: true),
                     Address_State = table.Column<string>(type: "text", nullable: true),
                     Address_Country = table.Column<string>(type: "text", nullable: true),
                     Address_ZipCode = table.Column<string>(type: "text", nullable: true),
-                    BuyerId = table.Column<Guid>(type: "uuid", nullable: true),
-                    OrderStatus = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
                     PaymentMethodId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -153,6 +153,7 @@ namespace Ordering.Infrastructure.Migrations
                     Slug = table.Column<string>(type: "text", nullable: true),
                     Thumbnail = table.Column<string>(type: "text", nullable: true),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    VariantOptions = table.Column<string>(type: "text", nullable: true),
                     OrderId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>

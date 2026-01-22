@@ -23,11 +23,13 @@ public record OrderStatusChangedToAwaitingValidationIntegrationEvent : Integrati
 public record OrderStockItem
 {
     public Guid ProductId { get; }
+    public Guid VariantId { get; }
     public int Quantity { get; }
 
-    public OrderStockItem(Guid productId, int quantity)
+    public OrderStockItem(Guid productId, Guid variantId, int quantity)
     {
         ProductId = productId;
+        VariantId = variantId;
         Quantity = quantity;
     }
 }

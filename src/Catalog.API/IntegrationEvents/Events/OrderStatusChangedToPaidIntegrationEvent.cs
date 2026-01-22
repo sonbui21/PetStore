@@ -1,3 +1,3 @@
 ﻿namespace Catalog.API.IntegrationEvents.Events;
 
-public record OrderStatusChangedToPaidIntegrationEvent(int OrderId, IEnumerable<OrderStockItem> OrderStockItems) : IntegrationEvent;
+public record OrderStatusChangedToPaidIntegrationEvent(Guid OrderId, IEnumerable<OrderStockItem> OrderStockItems) : IntegrationEvent;

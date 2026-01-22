@@ -20,7 +20,7 @@ public class IntegrationEventLogEntry
     [Required]
     public string EventTypeName { get; private set; }
     [NotMapped]
-    public string EventTypeShortName => EventTypeName.Split('.')?[EventTypeName.Length - 1];
+    public string EventTypeShortName => EventTypeName?.Split('.')?[^1];
     [NotMapped]
     public IntegrationEvent IntegrationEvent { get; private set; }
     public EventState State { get; set; }

@@ -12,7 +12,7 @@ using Ordering.Infrastructure;
 namespace Ordering.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20260121171422_Init")]
+    [Migration("20260122081811_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -201,6 +201,9 @@ namespace Ordering.Infrastructure.Migrations
 
                     b.Property<Guid>("VariantId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("VariantOptions")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

@@ -29,9 +29,6 @@ namespace Catalog.API.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("AvailableStock")
-                        .HasColumnType("integer");
-
                     b.Property<string>("CurrencyCode")
                         .HasColumnType("text");
 
@@ -137,6 +134,9 @@ namespace Catalog.API.Infrastructure.Migrations
 
                     b.HasIndex("CatalogItemId");
 
+                    b.HasIndex("CatalogItemId", "Title")
+                        .IsUnique();
+
                     b.ToTable("ItemVariant", (string)null);
                 });
 
@@ -179,6 +179,37 @@ namespace Catalog.API.Infrastructure.Migrations
                     b.HasIndex("CategoriesId");
 
                     b.ToTable("CatalogItemCategory");
+                });
+
+            modelBuilder.Entity("IntegrationEventLogEF.IntegrationEventLogEntry", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EventTypeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TimesSent")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TransactionId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("IntegrationEventLog", (string)null);
                 });
 
             modelBuilder.Entity("Catalog.API.Model.ItemOption", b =>

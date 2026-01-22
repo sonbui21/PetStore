@@ -199,6 +199,9 @@ namespace Ordering.Infrastructure.Migrations
                     b.Property<Guid>("VariantId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("VariantOptions")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");

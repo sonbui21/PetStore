@@ -18,7 +18,7 @@ public class CatalogProfile : Profile
             )
             .ForMember(
                 dest => dest.Title,
-                opt => opt.MapFrom(src => src.Title.TruncateAtWord())
+                opt => opt.MapFrom(src => src.Title)
             )
             .ForMember(
                 dest => dest.OldPrice,

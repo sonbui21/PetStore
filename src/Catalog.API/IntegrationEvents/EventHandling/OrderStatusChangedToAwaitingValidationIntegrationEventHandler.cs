@@ -14,11 +14,12 @@ public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler(
 
         foreach (var orderStockItem in @event.OrderStockItems)
         {
-            var catalogItem = await catalogContext.CatalogItems.FindAsync(orderStockItem.ProductId);
-            if (catalogItem is not null)
+            var variant = await catalogContext.ItemVariants
+                .SingleOrDefaultAsync(v => v.Id == orderStockItem.VariantId && v.CatalogItemId == orderStockItem.ProductId);
+            if (variant is not null)
             {
-                var hasStock = catalogItem.AvailableStock >= orderStockItem.Units;
-                var confirmedOrderStockItem = new ConfirmedOrderStockItem(catalogItem.Id, hasStock);
+                var hasStock = variant.AvailableStock >= orderStockItem.Quantity;
+                var confirmedOrderStockItem = new ConfirmedOrderStockItem(variant.Id, hasStock);
 
                 confirmedOrderStockItems.Add(confirmedOrderStockItem);
             }

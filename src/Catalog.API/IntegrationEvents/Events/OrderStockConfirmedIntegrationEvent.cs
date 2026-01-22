@@ -1,3 +1,3 @@
 ﻿namespace Catalog.API.IntegrationEvents.Events;
 
-public record OrderStockConfirmedIntegrationEvent(int OrderId) : IntegrationEvent;
+public record OrderStockConfirmedIntegrationEvent(Guid OrderId) : IntegrationEvent;

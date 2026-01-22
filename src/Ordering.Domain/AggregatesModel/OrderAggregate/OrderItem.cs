@@ -11,9 +11,11 @@ public class OrderItem : Entity
     public string Thumbnail { get; set; }
     public decimal Price { get; set; }
 
+    public string VariantOptions { get; set; }
+
     protected OrderItem() { }
 
-    public OrderItem(Guid productId, Guid variantId, string title, string slug, string thumbnail, decimal price, int quantity = 1)
+    public OrderItem(Guid productId, Guid variantId, string title, string slug, string thumbnail, decimal price, string variantOptions, int quantity = 1)
     {
         if (quantity <= 0)
         {
@@ -28,6 +30,8 @@ public class OrderItem : Entity
         Slug = slug;
         Thumbnail = thumbnail;
         Price = price;
+
+        VariantOptions = variantOptions;
     }
 
     public void AddQuantity(int quantity)

@@ -15,6 +15,8 @@ public class CatalogContext(DbContextOptions<CatalogContext> options) : DbContex
         modelBuilder.ApplyConfiguration(new ItemOptionEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ItemVariantEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ItemVariantOptionEntityTypeConfiguration());
+
+        modelBuilder.UseIntegrationEventLogs();
     }
 }
 

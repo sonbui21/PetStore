@@ -1,4 +1,4 @@
-﻿namespace Identity.API.Infrastructure;
+﻿namespace Identity.API.Extensions;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
 public class SecurityHeadersAttribute : ActionFilterAttribute

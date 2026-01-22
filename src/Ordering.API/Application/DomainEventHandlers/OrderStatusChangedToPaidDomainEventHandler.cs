@@ -20,7 +20,7 @@ public class OrderStatusChangedToPaidDomainEventHandler(
         var buyer = await _buyerRepository.FindByIdAsync(order.BuyerId.Value);
 
         var orderStockList = domainEvent.OrderItems
-            .Select(orderItem => new OrderStockItem(orderItem.ProductId, orderItem.Quantity));
+            .Select(orderItem => new OrderStockItem(orderItem.ProductId, orderItem.VariantId, orderItem.Quantity));
 
         var integrationEvent = new OrderStatusChangedToPaidIntegrationEvent(
             domainEvent.OrderId,

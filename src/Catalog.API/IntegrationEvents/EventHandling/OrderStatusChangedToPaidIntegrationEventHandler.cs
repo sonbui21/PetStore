@@ -9,12 +9,12 @@ public class OrderStatusChangedToPaidIntegrationEventHandler(
     {
         logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
 
-        //we're not blocking stock/inventory
         foreach (var orderStockItem in @event.OrderStockItems)
         {
-            var catalogItem = await catalogContext.CatalogItems.FindAsync(orderStockItem.ProductId);
+            var variant = await catalogContext.ItemVariants
+                .SingleOrDefaultAsync(v => v.Id == orderStockItem.VariantId && v.CatalogItemId == orderStockItem.ProductId);
 
-            //catalogItem?.RemoveStock(orderStockItem.Units);
+            variant?.RemoveStock(orderStockItem.Quantity);
         }
 
         await catalogContext.SaveChangesAsync();

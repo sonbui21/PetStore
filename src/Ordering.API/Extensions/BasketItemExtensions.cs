@@ -20,7 +20,8 @@ public static class BasketItemExtensions
             Title = item.Title,
             Slug = item.Slug,
             Thumbnail = item.Thumbnail,
-            Price = item.Price
+            Price = item.Price,
+            VariantOptions = item.VariantOptions
         };
     }
 }

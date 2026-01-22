@@ -1,4 +1,4 @@
-﻿namespace EventBus.Extensions;
+﻿namespace Microsoft.Extensions.DependencyInjection;
 
 public static class EventBusBuilderExtensions
 {

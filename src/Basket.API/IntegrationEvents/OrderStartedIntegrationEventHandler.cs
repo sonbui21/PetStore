@@ -1,4 +1,4 @@
-﻿namespace Basket.API.IntegrationEvents.EventHandling;
+﻿namespace Basket.API.IntegrationEvents;
 
 public class OrderStartedIntegrationEventHandler(
     IBasketRepository repository,

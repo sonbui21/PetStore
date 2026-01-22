@@ -1,0 +1,9 @@
+﻿global using EventBus.Abstractions;
+global using EventBus.Events;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.Extensions.Options;
+global using Npgsql;
+global using OrderProcessor;
+global using OrderProcessor.Events;
+global using OrderProcessor.Services;
+global using System.Text.Json.Serialization;

@@ -3,15 +3,12 @@
 public class CustomerBasket
 {
     public string CartId { get; set; }
-
     public List<BasketItem> Items { get; set; } = [];
-
     public string CurrencyCode { get; set; }
     public string Total { get; set; }
     public string SubTotal { get; set; }
     public string TaxTotal { get; set; }
     public string TotalQuantity { get; set; }
-
     public string Email { get; set; }
     public Address ShippingAddress { get; set; }
     public Address BillingAddress { get; set; }

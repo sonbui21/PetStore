@@ -10,6 +10,7 @@ public record OrderItem
     public string Slug { get; set; }
     public string Thumbnail { get; set; }
     public decimal Price { get; set; }
+    public string VariantOptions { get; set; }
 }
 
 public record Order
@@ -33,6 +34,7 @@ public record OrderSummary
     public DateTime Date { get; init; }
     public string Status { get; init; }
     public double Total { get; init; }
+    public List<OrderItem> OrderItems { get; set; }
 }
 
 public record CardType

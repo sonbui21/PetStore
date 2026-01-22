@@ -2,20 +2,15 @@
 
 public class Order : Entity, IAggregateRoot
 {
+    public Guid? BuyerId { get; private set; }
     public DateTime OrderDate { get; private set; }
+    public OrderStatus OrderStatus { get; private set; }
+    public string Description { get; private set; }
+    public Buyer Buyer { get; }
 
     // Address is a Value Object pattern example persisted as EF Core 2.0 owned entity
     [Required]
     public Address Address { get; private set; }
-
-    public Guid? BuyerId { get; private set; }
-
-    public Buyer Buyer { get; }
-
-    public OrderStatus OrderStatus { get; private set; }
-
-    public string Description { get; private set; }
-
     // Draft orders have this set to true. Currently we don't check anywhere the draft status of an Order, but we could do it if needed
 #pragma warning disable CS0414 // The field 'Order._isDraft' is assigned but its value is never used
     private bool _isDraft;
@@ -65,7 +60,7 @@ public class Order : Entity, IAggregateRoot
     // This Order AggregateRoot's method "AddOrderItem()" should be the only way to add Items to the Order,
     // so any behavior (discounts, etc.) and validations are controlled by the AggregateRoot 
     // in order to maintain consistency between the whole Aggregate. 
-    public void AddOrderItem(Guid productId, Guid variantId, string title, string slug, string thumbnail, decimal price, int quantity = 1)
+    public void AddOrderItem(Guid productId, Guid variantId, string title, string slug, string thumbnail, decimal price, string variantOptions, int quantity = 1)
     {
         var existingOrderForProduct = _orderItems.SingleOrDefault(o => o.ProductId == productId);
 
@@ -76,7 +71,7 @@ public class Order : Entity, IAggregateRoot
         else
         {
             //add validated new order item
-            var orderItem = new OrderItem(productId, variantId, title, slug, thumbnail, price, quantity);
+            var orderItem = new OrderItem(productId, variantId, title, slug, thumbnail, price, variantOptions, quantity);
             _orderItems.Add(orderItem);
         }
     }
@@ -114,6 +109,7 @@ public class Order : Entity, IAggregateRoot
             AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(Id, OrderItems));
 
             OrderStatus = OrderStatus.Paid;
+            // TODO
             Description = "The payment was performed at a simulated \"American Bank checking bank account ending on XX35071\"";
         }
     }

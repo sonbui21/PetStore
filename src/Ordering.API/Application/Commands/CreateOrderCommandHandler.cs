@@ -31,7 +31,8 @@ public class CreateOrderCommandHandler(IMediator mediator,
 
         foreach (var item in message.OrderItems)
         {
-            order.AddOrderItem(item.ProductId, item.VariantId, item.Title, item.Slug, item.Thumbnail, item.Price, item.Quantity);
+            order.AddOrderItem(item.ProductId, item.VariantId, item.Title, item.Slug,
+                item.Thumbnail, item.Price, item.VariantOptions, item.Quantity);
         }
 
         _logger.LogInformation("Creating Order - Order: {@Order}", order);

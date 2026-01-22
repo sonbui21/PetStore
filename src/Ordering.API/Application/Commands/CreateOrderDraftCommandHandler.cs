@@ -12,7 +12,8 @@ public class CreateOrderDraftCommandHandler
         var orderItems = message.Items.Select(i => i.ToOrderItemDto());
         foreach (var item in orderItems)
         {
-            order.AddOrderItem(item.ProductId, item.VariantId, item.Title, item.Slug, item.Thumbnail, item.Price, item.Quantity);
+            order.AddOrderItem(item.ProductId, item.VariantId, item.Title, item.Slug,
+                item.Thumbnail, item.Price, item.VariantOptions, item.Quantity);
         }
 
         return Task.FromResult(OrderDraftDto.FromOrder(order));
@@ -37,6 +38,7 @@ public record OrderDraftDto
                 Slug = oi.Slug,
                 Thumbnail = oi.Thumbnail,
                 Price = oi.Price,
+                VariantOptions = oi.VariantOptions
             }),
             Total = order.GetTotal()
         };
@@ -53,4 +55,5 @@ public record OrderItemDto
     public string Slug { get; set; }
     public string Thumbnail { get; set; }
     public decimal Price { get; set; }
+    public string VariantOptions { get; set; }
 }

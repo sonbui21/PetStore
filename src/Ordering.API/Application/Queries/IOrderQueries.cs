@@ -4,7 +4,7 @@ public interface IOrderQueries
 {
     Task<Order> GetOrderAsync(Guid id);
 
-    Task<IEnumerable<OrderSummary>> GetOrdersFromUserAsync(string userId);
+    Task<ResultList<OrderSummary>> GetOrdersFromUserAsync(string userId);
 
     Task<IEnumerable<CardType>> GetCardTypesAsync();
 }

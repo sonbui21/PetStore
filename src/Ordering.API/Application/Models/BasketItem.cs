@@ -11,4 +11,5 @@ public class BasketItem
     public string Thumbnail { get; set; }
 
     public decimal Price { get; set; }
+    public string VariantOptions { get; set; }
 }

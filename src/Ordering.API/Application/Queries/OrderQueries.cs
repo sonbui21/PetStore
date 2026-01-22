@@ -33,18 +33,34 @@ public class OrderQueries(OrderingContext context) : IOrderQueries
         };
     }
 
-    public async Task<IEnumerable<OrderSummary>> GetOrdersFromUserAsync(string userId)
+    public async Task<ResultList<OrderSummary>> GetOrdersFromUserAsync(string userId)
     {
-        return await context.Orders
+        var orders = await context.Orders
             .Where(o => o.Buyer.IdentityGuid == userId)
             .Select(o => new OrderSummary
             {
                 OrderId = o.Id,
                 Date = o.OrderDate,
                 Status = o.OrderStatus.ToString(),
-                Total = (double)o.OrderItems.Sum(oi => oi.Price * oi.Quantity)
+                Total = (double)o.OrderItems.Sum(oi => oi.Price * oi.Quantity),
+                OrderItems = o.OrderItems.Select(oi => new OrderItem
+                {
+                    ProductId = oi.ProductId,
+                    VariantId = oi.VariantId,
+                    Quantity = oi.Quantity,
+                    Title = oi.Title,
+                    Slug = oi.Slug,
+                    Thumbnail = oi.Thumbnail,
+                    Price = oi.Price,
+                    VariantOptions = oi.VariantOptions
+
+                }).ToList()
             })
-            .ToListAsync();
+            .OrderByDescending(o => o.Date)
+            .ToResultListAsync();
+
+
+        return orders;
     }
 
     public async Task<IEnumerable<CardType>> GetCardTypesAsync() =>

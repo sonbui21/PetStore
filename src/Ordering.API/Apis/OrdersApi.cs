@@ -20,7 +20,7 @@ public static class OrdersApi
         return api;
     }
 
-    public static async Task<Ok<IEnumerable<OrderSummary>>> GetOrdersByUserAsync([AsParameters] OrderServices services)
+    public static async Task<Ok<ResultList<OrderSummary>>> GetOrdersByUserAsync([AsParameters] OrderServices services)
     {
         var userId = services.IdentityService.GetUserIdentity();
         var orders = await services.Queries.GetOrdersFromUserAsync(userId);
