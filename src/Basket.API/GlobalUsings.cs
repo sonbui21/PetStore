@@ -1,7 +1,6 @@
 ﻿global using Basket.API.Extensions;
 global using Basket.API.Grpc;
 global using Basket.API.IntegrationEvents;
-global using Basket.API.Model;
 global using Basket.API.Repositories;
 global using EventBus.Abstractions;
 global using EventBus.Events;

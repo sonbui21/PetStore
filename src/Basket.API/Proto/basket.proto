@@ -5,88 +5,40 @@ option csharp_namespace = "Basket.API.Grpc";
 package BasketApi;
 
 service Basket {
-    rpc GetBasket(GetBasketRequest) returns (CustomerBasketResponse) {}
-    rpc UpdateBasket(UpdateBasketRequest) returns (CustomerBasketResponse) {}
+    rpc GetBasket(GetBasketRequest) returns (CustomerBasket) {}
+    rpc UpdateBasket(CustomerBasket) returns (CustomerBasket) {}
 }
 
 message GetBasketRequest {
-    string cart_id = 1;
+    string basket_id = 1;
 }
 
-message CustomerBasketResponse {
-    string cart_id = 1;
+message CustomerBasket {
+    string basket_id = 1;
     repeated BasketItem items = 2;
 
-    optional string currency_code = 3;
-    optional string total = 4;
-    optional string sub_total = 5;
-    optional string tax_total = 6;
-    optional string total_quantity = 7;
-
-    optional string email = 8;
-    optional Address shipping_address = 9;
-    optional Address billing_address = 10;
-    optional ShippingMethod shipping_methods = 11;
-    optional string payment_collection = 12;
-    optional string current_step = 13;
+    optional Address shipping_address = 3;
+    optional string payment_collection = 4;
 }
 
 message BasketItem {
-  string id = 1;
-  string product_id = 2;
-  string variant_id = 3;
-  int32 quantity = 4;
-
-  string title = 5;
-  string slug = 6;
-  string thumbnail = 7;
-
-  repeated VariantOption variant_options = 8;
-  string price = 9;
-  int32 available_stock = 10;
-}
-
-message VariantOption {
-  string name = 1;
-  string value = 2;
+  string product_id = 1;
+  string variant_id = 2;
+  int32 quantity = 3;
+  string title = 4;
+  string slug = 5;
+  string thumbnail = 6;
+  string price = 7;
+  int32 available_stock = 8;
+  string variant_options = 9;
 }
 
 message Address {
-  string id = 1;
-  string customer_id = 2;
-  string first_name = 3;
-  string last_name = 4;
-  string phone = 5;
-  string company = 6;
-  string address_1 = 7;
-  string address_2 = 8;
-  string city = 9;
-  string country_code = 10;
-  string province = 11;
-  string postal_code = 12;
-}
-
-message ShippingMethod {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  string amount = 4;
-}
-
-message UpdateBasketRequest {
-    string cart_id = 1;
-    repeated BasketItem items = 2;
-
-    string currency_code = 3;
-    string total = 4;
-    string sub_total = 5;
-    string tax_total = 6;
-    string total_quantity = 7;
-
-    string email = 8;
-    Address shipping_address = 9;
-    Address billing_address = 10;
-    ShippingMethod shipping_methods = 11;
-    optional string payment_collection = 12;
-    optional string current_step = 13;
+  string name = 1;
+  string phone = 2;
+  string street = 3;
+  string city = 4;
+  string state = 5;
+  string country = 6;
+  string zip_code = 7;
 }

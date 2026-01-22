@@ -1,4 +1,4 @@
-﻿using Basket.API.Model;
+﻿using CustomerBasket = Basket.API.Model.CustomerBasket;
 
 namespace Basket.API.Repositories;
 

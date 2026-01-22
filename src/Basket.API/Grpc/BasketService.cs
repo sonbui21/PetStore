@@ -1,54 +1,58 @@
-﻿namespace Basket.API.Grpc;
+﻿using CustomerBasketModel = Basket.API.Model.CustomerBasket;
+using AddressModel = Basket.API.Model.Address;
+using BasketItemModel = Basket.API.Model.BasketItem;
+
+namespace Basket.API.Grpc;
 
 public class BasketService(
     IBasketRepository repository,
     ILogger<BasketService> logger) : Basket.BasketBase
 {
     [AllowAnonymous]
-    public override async Task<CustomerBasketResponse> GetBasket(GetBasketRequest request, ServerCallContext context)
+    public override async Task<CustomerBasket> GetBasket(GetBasketRequest request, ServerCallContext context)
     {
         var userId = context.GetUserIdentity();
 
         // ===== GUEST =====
         if (string.IsNullOrEmpty(userId))
         {
-            if (string.IsNullOrEmpty(request.CartId))
+            if (string.IsNullOrEmpty(request.BasketId))
             {
-                return MapToCustomerBasketResponse(new CustomerBasket(request.CartId));
+                return MapToCustomerBasketResponse(new CustomerBasketModel(request.BasketId));
             }
 
-            var data = await repository.GetBasketAsync(request.CartId);
+            var data = await repository.GetBasketAsync(request.BasketId);
             return data is not null ? MapToCustomerBasketResponse(data)
-                                    : MapToCustomerBasketResponse(new CustomerBasket(request.CartId));
+                                    : MapToCustomerBasketResponse(new CustomerBasketModel(request.BasketId));
         }
 
         // ===== LOGGED IN =====
         var userCart = await repository.GetBasketAsync(userId);
 
-        if (string.IsNullOrEmpty(request.CartId))
+        if (string.IsNullOrEmpty(request.BasketId))
         {
             if (userCart is not null)
             {
                 return MapToCustomerBasketResponse(userCart);
             }
-            return MapToCustomerBasketResponse(new CustomerBasket(userId));
+            return MapToCustomerBasketResponse(new CustomerBasketModel(userId));
         }
 
-        if (userId == request.CartId)
+        if (userId == request.BasketId)
         {
             if (userCart is not null)
             {
                 return MapToCustomerBasketResponse(userCart);
             }
-            return MapToCustomerBasketResponse(new CustomerBasket(userId));
+            return MapToCustomerBasketResponse(new CustomerBasketModel(userId));
         }
 
-        var guestCart = await repository.GetBasketAsync(request.CartId);
+        var guestCart = await repository.GetBasketAsync(request.BasketId);
 
         if (userCart is not null && guestCart is not null)
         {
             var mergedCart = MergeBaskets(userCart, guestCart);
-            mergedCart.CartId = userId;
+            mergedCart.BasketId = userId;
 
             var res = await repository.UpdateBasketAsync(mergedCart);
             if (res is null)
@@ -56,7 +60,7 @@ public class BasketService(
                 ThrowBasketDoesNotExist(userId);
             }
 
-            await repository.DeleteBasketAsync(request.CartId);
+            await repository.DeleteBasketAsync(request.BasketId);
             return MapToCustomerBasketResponse(res);
         }
 
@@ -67,8 +71,8 @@ public class BasketService(
 
         if (guestCart is not null)
         {
-            var oldGuestId = guestCart.CartId;
-            guestCart.CartId = userId;
+            var oldGuestId = guestCart.BasketId;
+            guestCart.BasketId = userId;
             var res = await repository.UpdateBasketAsync(guestCart);
             if (res is null)
             {
@@ -79,17 +83,17 @@ public class BasketService(
             return MapToCustomerBasketResponse(guestCart);
         }
 
-        return MapToCustomerBasketResponse(new Model.CustomerBasket(userId));
+        return MapToCustomerBasketResponse(new CustomerBasketModel(userId));
     }
 
 
     [AllowAnonymous]
-    public override async Task<CustomerBasketResponse> UpdateBasket(UpdateBasketRequest request, ServerCallContext context)
+    public override async Task<CustomerBasket> UpdateBasket(CustomerBasket request, ServerCallContext context)
     {
         var userId = context.GetUserIdentity();
         if (string.IsNullOrEmpty(userId))
         {
-            userId = request.CartId;
+            userId = request.BasketId;
         }
 
         if (string.IsNullOrEmpty(userId))
@@ -97,12 +101,9 @@ public class BasketService(
             ThrowNotAuthenticated();
         }
 
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Begin UpdateBasket call from method {Method} for basket id {Id}", context.Method, userId);
-        }
+        LogExtensions.LogBeginUpdateBasket(logger, context.Method, userId);
 
-        var customerBasket = MapToCustomerBasket(userId, request);
+        var customerBasket = MapToCustomerBasketModel(userId, request);
         var response = await repository.UpdateBasketAsync(customerBasket);
         if (response is null)
         {
@@ -112,82 +113,35 @@ public class BasketService(
         return MapToCustomerBasketResponse(response);
     }
 
-    private static CustomerBasket MergeBaskets(CustomerBasket userCart, CustomerBasket guestCart)
+    private static CustomerBasketModel MergeBaskets(CustomerBasketModel userCart, CustomerBasketModel guestCart)
     {
-        var mergedCart = new CustomerBasket
+        var mergedCart = new CustomerBasketModel
         {
-            CartId = userCart.CartId,
+            BasketId = userCart.BasketId,
             Items = [],
-
-            CurrencyCode = userCart.CurrencyCode,
-            Total = userCart.Total,
-            SubTotal = userCart.SubTotal,
-            TaxTotal = userCart.TaxTotal,
-            TotalQuantity = userCart.TotalQuantity,
-
-            Email = userCart.Email,
-
             PaymentCollection = userCart.PaymentCollection,
-            CurrentStep = userCart.CurrentStep,
         };
 
         if (userCart.ShippingAddress is not null)
         {
-            mergedCart.ShippingAddress = new Model.Address
+            mergedCart.ShippingAddress = new AddressModel
             {
-                Id = userCart.ShippingAddress.Id,
-                CustomerId = userCart.ShippingAddress.CustomerId,
-                FirstName = userCart.ShippingAddress.FirstName,
-                LastName = userCart.ShippingAddress.LastName,
+                Name = userCart.ShippingAddress.Name,
                 Phone = userCart.ShippingAddress.Phone,
-                Company = userCart.ShippingAddress.Company,
-                Address1 = userCart.ShippingAddress.Address1,
-                Address2 = userCart.ShippingAddress.Address2,
-                City = userCart.ShippingAddress.City,
-                CountryCode = userCart.ShippingAddress.CountryCode,
-                Province = userCart.ShippingAddress.Province,
-                PostalCode = userCart.ShippingAddress.PostalCode
+                Street = userCart.ShippingAddress.Street,
+                State = userCart.ShippingAddress.State,
+                City = userCart.ShippingAddress.Phone,
+                Country = userCart.ShippingAddress.Country,
+                ZipCode = userCart.ShippingAddress.ZipCode,
             };
         }
-
-        if (userCart.BillingAddress is not null)
-        {
-            mergedCart.ShippingAddress = new Model.Address
-            {
-                Id = userCart.ShippingAddress.Id,
-                CustomerId = userCart.ShippingAddress.CustomerId,
-                FirstName = userCart.ShippingAddress.FirstName,
-                LastName = userCart.ShippingAddress.LastName,
-                Phone = userCart.ShippingAddress.Phone,
-                Company = userCart.ShippingAddress.Company,
-                Address1 = userCart.ShippingAddress.Address1,
-                Address2 = userCart.ShippingAddress.Address2,
-                City = userCart.ShippingAddress.City,
-                CountryCode = userCart.ShippingAddress.CountryCode,
-                Province = userCart.ShippingAddress.Province,
-                PostalCode = userCart.ShippingAddress.PostalCode
-            };
-        }
-
-        if (userCart.ShippingMethods is not null)
-        {
-            mergedCart.ShippingMethods = new Model.ShippingMethod
-            {
-                Id = userCart.ShippingMethods.Id,
-                Name = userCart.ShippingMethods.Name,
-                Description = userCart.ShippingMethods.Description,
-                Amount = userCart.ShippingMethods.Amount,
-            };
-        }
-
-        var itemMap = new Dictionary<string, Model.BasketItem>();
-
+        
+        var itemMap = new Dictionary<string, BasketItemModel>();
         foreach (var item in userCart.Items)
         {
             var key = $"{item.ProductId}_{item.VariantId}";
-            itemMap[key] = new Model.BasketItem
+            itemMap[key] = new BasketItemModel
             {
-                Id = item.Id,
                 ProductId = item.ProductId,
                 VariantId = item.VariantId,
                 Quantity = item.Quantity,
@@ -196,7 +150,7 @@ public class BasketService(
                 Thumbnail = item.Thumbnail,
                 Price = item.Price,
                 AvailableStock = item.AvailableStock,
-                VariantOptions = item.VariantOptions?.ToList() ?? new List<Model.VariantOption>()
+                VariantOptions = item.VariantOptions
             };
         }
 
@@ -211,7 +165,6 @@ public class BasketService(
             {
                 itemMap[key] = new Model.BasketItem
                 {
-                    Id = item.Id,
                     ProductId = item.ProductId,
                     VariantId = item.VariantId,
                     Quantity = item.Quantity,
@@ -220,7 +173,7 @@ public class BasketService(
                     Thumbnail = item.Thumbnail,
                     Price = item.Price,
                     AvailableStock = item.AvailableStock,
-                    VariantOptions = item.VariantOptions?.ToList() ?? new List<Model.VariantOption>()
+                    VariantOptions = item.VariantOptions
                 };
             }
         }
@@ -235,78 +188,32 @@ public class BasketService(
     [DoesNotReturn]
     private static void ThrowBasketDoesNotExist(string userId) => throw new RpcException(new Status(StatusCode.NotFound, $"Basket with buyer id {userId} does not exist"));
 
-    private static CustomerBasketResponse MapToCustomerBasketResponse(CustomerBasket customerBasket)
+    private static CustomerBasket MapToCustomerBasketResponse(CustomerBasketModel customerBasket)
     {
-        var response = new CustomerBasketResponse()
+        var response = new CustomerBasket()
         {
-            CartId = customerBasket.CartId,
-
-            CurrencyCode = customerBasket.CurrencyCode,
-            Total = customerBasket.Total,
-            SubTotal = customerBasket.SubTotal,
-            TaxTotal = customerBasket.TaxTotal,
-            TotalQuantity = customerBasket.TotalQuantity,
-
-            Email = customerBasket.Email,
- 
+            BasketId = customerBasket.BasketId,
             PaymentCollection = customerBasket.PaymentCollection,
-            CurrentStep = customerBasket.CurrentStep,
         };
 
         if (customerBasket.ShippingAddress is not null)
         {
             response.ShippingAddress = new Address
             {
-                Id = customerBasket.ShippingAddress.Id,
-                CustomerId = customerBasket.ShippingAddress.CustomerId,
-                FirstName = customerBasket.ShippingAddress.FirstName,
-                LastName = customerBasket.ShippingAddress.LastName,
+                Name = customerBasket.ShippingAddress.Name,
                 Phone = customerBasket.ShippingAddress.Phone,
-                Company = customerBasket.ShippingAddress.Company,
-                Address1 = customerBasket.ShippingAddress.Address1,
-                Address2 = customerBasket.ShippingAddress.Address2,
-                City = customerBasket.ShippingAddress.City,
-                CountryCode = customerBasket.ShippingAddress.CountryCode,
-                Province = customerBasket.ShippingAddress.Province,
-                PostalCode = customerBasket.ShippingAddress.PostalCode
+                Street = customerBasket.ShippingAddress.Street,
+                State = customerBasket.ShippingAddress.State,
+                City = customerBasket.ShippingAddress.Phone,
+                Country = customerBasket.ShippingAddress.Country,
+                ZipCode = customerBasket.ShippingAddress.ZipCode,
             };
         }
-
-        if (customerBasket.BillingAddress is not null)
-        {
-            response.BillingAddress = new Address
-            {
-                Id = customerBasket.BillingAddress.Id,
-                CustomerId = customerBasket.BillingAddress.CustomerId,
-                FirstName = customerBasket.BillingAddress.FirstName,
-                LastName = customerBasket.BillingAddress.LastName,
-                Phone = customerBasket.BillingAddress.Phone,
-                Company = customerBasket.BillingAddress.Company,
-                Address1 = customerBasket.BillingAddress.Address1,
-                Address2 = customerBasket.BillingAddress.Address2,
-                City = customerBasket.BillingAddress.City,
-                CountryCode = customerBasket.BillingAddress.CountryCode,
-                Province = customerBasket.BillingAddress.Province,
-                PostalCode = customerBasket.BillingAddress.PostalCode
-            };
-        }
-
-        if (customerBasket.ShippingMethods is not null)
-        {
-            response.ShippingMethods = new ShippingMethod
-            {
-                Id = customerBasket.ShippingMethods.Id,
-                Name = customerBasket.ShippingMethods.Name,
-                Description = customerBasket.ShippingMethods.Description,
-                Amount = customerBasket.ShippingMethods.Amount,
-            };
-        }
-
+        
         foreach (var item in customerBasket.Items)
         {
             var basketItem = new BasketItem()
             {
-                Id = item.Id,
                 ProductId = item.ProductId,
                 VariantId = item.VariantId,
                 Quantity = item.Quantity,
@@ -317,16 +224,8 @@ public class BasketService(
 
                 Price = item.Price,
                 AvailableStock = item.AvailableStock,
+                VariantOptions = item.VariantOptions,
             };
-
-            foreach (var option in item.VariantOptions)
-            {
-                basketItem.VariantOptions.Add(new VariantOption()
-                {
-                    Name = option.Name,
-                    Value = option.Value,
-                });
-            }
 
             response.Items.Add(basketItem);
         }
@@ -334,77 +233,32 @@ public class BasketService(
         return response;
     }
 
-    private static CustomerBasket MapToCustomerBasket(string id, UpdateBasketRequest customerBasket)
+    private static CustomerBasketModel MapToCustomerBasketModel(string id, CustomerBasket customerBasket)
     {
-        var response = new CustomerBasket
+        var response = new CustomerBasketModel
         {
-            CartId = id,
-            CurrencyCode = customerBasket.CurrencyCode,
-            Total = customerBasket.Total,
-            SubTotal = customerBasket.SubTotal,
-            TaxTotal = customerBasket.TaxTotal,
-            TotalQuantity = customerBasket.TotalQuantity,
-
-            Email = customerBasket.Email,
-
+            BasketId = id,
             PaymentCollection = customerBasket.PaymentCollection,
-            CurrentStep = customerBasket.CurrentStep,
         };
 
         if (customerBasket.ShippingAddress is not null)
         {
-            response.ShippingAddress = new Model.Address
+            response.ShippingAddress = new AddressModel
             {
-                Id = customerBasket.ShippingAddress.Id,
-                CustomerId = customerBasket.ShippingAddress.CustomerId,
-                FirstName = customerBasket.ShippingAddress.FirstName,
-                LastName = customerBasket.ShippingAddress.LastName,
+                Name = customerBasket.ShippingAddress.Name,
                 Phone = customerBasket.ShippingAddress.Phone,
-                Company = customerBasket.ShippingAddress.Company,
-                Address1 = customerBasket.ShippingAddress.Address1,
-                Address2 = customerBasket.ShippingAddress.Address2,
-                City = customerBasket.ShippingAddress.City,
-                CountryCode = customerBasket.ShippingAddress.CountryCode,
-                Province = customerBasket.ShippingAddress.Province,
-                PostalCode = customerBasket.ShippingAddress.PostalCode
-            };
-        }
-
-        if (customerBasket.BillingAddress is not null)
-        {
-            response.BillingAddress = new Model.Address
-            {
-                Id = customerBasket.BillingAddress.Id,
-                CustomerId = customerBasket.BillingAddress.CustomerId,
-                FirstName = customerBasket.BillingAddress.FirstName,
-                LastName = customerBasket.BillingAddress.LastName,
-                Phone = customerBasket.BillingAddress.Phone,
-                Company = customerBasket.BillingAddress.Company,
-                Address1 = customerBasket.BillingAddress.Address1,
-                Address2 = customerBasket.BillingAddress.Address2,
-                City = customerBasket.BillingAddress.City,
-                CountryCode = customerBasket.BillingAddress.CountryCode,
-                Province = customerBasket.BillingAddress.Province,
-                PostalCode = customerBasket.BillingAddress.PostalCode
-            };
-        }
-
-        if (customerBasket.ShippingMethods is not null)
-        {
-            response.ShippingMethods = new Model.ShippingMethod
-            {
-                Id = customerBasket.ShippingMethods.Id,
-                Name = customerBasket.ShippingMethods.Name,
-                Description = customerBasket.ShippingMethods.Description,
-                Amount = customerBasket.ShippingMethods.Amount,
+                Street = customerBasket.ShippingAddress.Street,
+                State = customerBasket.ShippingAddress.State,
+                City = customerBasket.ShippingAddress.Phone,
+                Country = customerBasket.ShippingAddress.Country,
+                ZipCode = customerBasket.ShippingAddress.ZipCode,
             };
         }
 
         foreach (var item in customerBasket.Items)
         {
-            var basketItem = new Model.BasketItem()
+            var basketItem = new BasketItemModel()
             {
-                Id = item.Id,
                 ProductId = item.ProductId,
                 VariantId = item.VariantId,
                 Quantity = item.Quantity,
@@ -413,19 +267,10 @@ public class BasketService(
                 Slug = item.Slug,
                 Thumbnail = item.Thumbnail,
 
-                VariantOptions = [],
                 Price = item.Price,
                 AvailableStock = item.AvailableStock,
+                VariantOptions = item.VariantOptions,
             };
-
-            foreach (var option in item.VariantOptions)
-            {
-                basketItem.VariantOptions.Add(new()
-                {
-                    Name = option.Name,
-                    Value = option.Value,
-                });
-            }
 
             response.Items.Add(basketItem);
 

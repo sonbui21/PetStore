@@ -98,8 +98,8 @@ public static class OrdersApi
 public record CreateOrderRequest(
     string UserId,
     string UserName,
-    string City,
     string Street,
+    string City,
     string State,
     string Country,
     string ZipCode,

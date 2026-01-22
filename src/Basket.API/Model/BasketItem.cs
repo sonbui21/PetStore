@@ -2,18 +2,15 @@
 
 public class BasketItem : IValidatableObject
 {
-    public string Id { get; set; }
     public string ProductId { get; set; }
     public string VariantId { get; set; }
     public int Quantity { get; set; }
-
     public string Title { get; set; }
     public string Slug { get; set; }
     public string Thumbnail { get; set; }
-
-    public List<VariantOption> VariantOptions { get; set; }
     public string Price { get; set; }
     public int AvailableStock { get; set; }
+    public string VariantOptions { get; set; }
 
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -27,10 +24,4 @@ public class BasketItem : IValidatableObject
 
         return results;
     }
-}
-
-public class VariantOption
-{
-    public string Name { get; set; }
-    public string Value { get; set; }
 }

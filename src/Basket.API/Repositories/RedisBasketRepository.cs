@@ -1,4 +1,6 @@
-﻿namespace Basket.API.Repositories;
+﻿using CustomerBasket = Basket.API.Model.CustomerBasket;
+
+namespace Basket.API.Repositories;
 
 public class RedisBasketRepository(ILogger<RedisBasketRepository> logger, IConnectionMultiplexer redis) : IBasketRepository
 {
@@ -14,8 +16,6 @@ public class RedisBasketRepository(ILogger<RedisBasketRepository> logger, IConne
 
     public async Task<bool> DeleteBasketAsync(string id)
     {
-        //return await _database.KeyDeleteAsync(GetBasketKey(id));
-
         using var data = await _database.StringGetLeaseAsync(GetBasketKey(id));
         if (data is null || data.Length == 0)
         {
@@ -25,24 +25,13 @@ public class RedisBasketRepository(ILogger<RedisBasketRepository> logger, IConne
         var basket = JsonSerializer.Deserialize(data.Span, BasketSerializationContext.Default.CustomerBasket);
         var newBasket = new CustomerBasket
         {
-            CartId = basket.CartId,
-            CurrencyCode = "USD",
-            Total = "0",
-            SubTotal = "0",
-            TaxTotal = "0",
-            TotalQuantity = "0",
-            CurrentStep = "review",
-
-            Email = basket.Email,
-            ShippingMethods = basket.ShippingMethods,
+            BasketId = basket.BasketId,
             ShippingAddress = basket.ShippingAddress,
-            BillingAddress = basket.BillingAddress,
             PaymentCollection = basket.PaymentCollection
         };
 
         var json = JsonSerializer.SerializeToUtf8Bytes(newBasket, BasketSerializationContext.Default.CustomerBasket);
-
-        return await _database.StringSetAsync(GetBasketKey(basket.CartId), json);
+        return await _database.StringSetAsync(GetBasketKey(basket.BasketId), json);
     }
 
     public async Task<CustomerBasket> GetBasketAsync(string customerId)
@@ -53,13 +42,14 @@ public class RedisBasketRepository(ILogger<RedisBasketRepository> logger, IConne
         {
             return null;
         }
+
         return JsonSerializer.Deserialize(data.Span, BasketSerializationContext.Default.CustomerBasket);
     }
 
     public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)
     {
         var json = JsonSerializer.SerializeToUtf8Bytes(basket, BasketSerializationContext.Default.CustomerBasket);
-        var created = await _database.StringSetAsync(GetBasketKey(basket.CartId), json);
+        var created = await _database.StringSetAsync(GetBasketKey(basket.BasketId), json);
 
         if (!created)
         {
@@ -69,7 +59,7 @@ public class RedisBasketRepository(ILogger<RedisBasketRepository> logger, IConne
 
 
         logger.LogInformation("Basket item persisted successfully.");
-        return await GetBasketAsync(basket.CartId);
+        return await GetBasketAsync(basket.BasketId);
     }
 }
 
