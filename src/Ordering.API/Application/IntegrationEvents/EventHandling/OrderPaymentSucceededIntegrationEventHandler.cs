@@ -9,6 +9,6 @@ public class OrderPaymentSucceededIntegrationEventHandler(
     {
         logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
 
-        await orchestrator.HandlePaymentSucceededAsync(@event.OrderId);
+        await orchestrator.HandlePaymentConfirmedAsync(@event.OrderId);
     }
 }

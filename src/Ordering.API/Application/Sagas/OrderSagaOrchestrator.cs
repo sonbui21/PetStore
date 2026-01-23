@@ -29,12 +29,12 @@ public class OrderSagaOrchestrator(
     {
         var saga = await GetOrCreateSagaAsync(orderId);
 
-        saga.MarkAwaitingValidation();
+        saga.MarkAwaitingPayment();
 
         _sagaRepository.Update(saga);
         await _sagaRepository.UnitOfWork.SaveEntitiesAsync();
 
-        var command = new SetAwaitingValidationOrderStatusCommand(orderId);
+        var command = new SetAwaitingPaymentOrderStatusCommand(orderId);
         await SendCommandAsync(command);
     }
 
@@ -43,6 +43,7 @@ public class OrderSagaOrchestrator(
         var saga = await GetOrCreateSagaAsync(orderId);
 
         saga.MarkStockConfirmed();
+        saga.MarkCompleted();
 
         _sagaRepository.Update(saga);
         await _sagaRepository.UnitOfWork.SaveEntitiesAsync();
@@ -65,17 +66,16 @@ public class OrderSagaOrchestrator(
         await SendCommandAsync(command);
     }
 
-    public async Task HandlePaymentSucceededAsync(Guid orderId)
+    public async Task HandlePaymentConfirmedAsync(Guid orderId)
     {
         var saga = await GetOrCreateSagaAsync(orderId);
 
-        saga.MarkPaymentSucceeded();
-        saga.MarkCompleted();
+        saga.MarkPaymentConfirmed();
 
         _sagaRepository.Update(saga);
         await _sagaRepository.UnitOfWork.SaveEntitiesAsync();
 
-        var command = new SetPaidOrderStatusCommand(orderId);
+        var command = new SetPaymentConfirmedOrderStatusCommand(orderId);
         await SendCommandAsync(command);
     }
 

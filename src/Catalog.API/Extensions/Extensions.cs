@@ -25,7 +25,7 @@ public static class Extensions
         builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
         builder.AddRabbitMqEventBus("eventbus")
-               .AddSubscription<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>()
+               .AddSubscription<OrderStatusChangedToPaymentConfirmedIntegrationEvent, OrderStatusChangedToPaymentConfirmedIntegrationEventHandler>()
                .AddSubscription<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
 
         builder.Services.AddOptions<CatalogOptions>()

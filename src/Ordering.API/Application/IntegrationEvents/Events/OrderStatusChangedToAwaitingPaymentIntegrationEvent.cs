@@ -1,14 +1,17 @@
 ﻿namespace Ordering.API.Application.IntegrationEvents.Events;
 
-public record OrderStatusChangedToStockConfirmedIntegrationEvent : IntegrationEvent
+public record OrderStatusChangedToAwaitingPaymentIntegrationEvent : IntegrationEvent
 {
     public Guid OrderId { get; }
     public OrderStatus OrderStatus { get; }
     public string BuyerName { get; }
     public string BuyerIdentityGuid { get; }
 
-    public OrderStatusChangedToStockConfirmedIntegrationEvent(
-        Guid orderId, OrderStatus orderStatus, string buyerName, string buyerIdentityGuid)
+    public OrderStatusChangedToAwaitingPaymentIntegrationEvent(
+        Guid orderId,
+        OrderStatus orderStatus,
+        string buyerName,
+        string buyerIdentityGuid)
     {
         OrderId = orderId;
         OrderStatus = orderStatus;

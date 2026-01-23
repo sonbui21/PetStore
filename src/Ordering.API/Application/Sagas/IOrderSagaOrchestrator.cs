@@ -10,7 +10,7 @@ public interface IOrderSagaOrchestrator
 
     Task HandleStockRejectedAsync(Guid orderId, List<Guid> orderStockItems);
 
-    Task HandlePaymentSucceededAsync(Guid orderId);
+    Task HandlePaymentConfirmedAsync(Guid orderId);
 
     Task HandlePaymentFailedAsync(Guid orderId);
 }

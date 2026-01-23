@@ -1,7 +1,7 @@
 ﻿namespace Ordering.API.Application.Commands;
 
 // Regular CommandHandler
-public class SetAwaitingValidationOrderStatusCommandHandler(IOrderRepository orderRepository) : IRequestHandler<SetAwaitingValidationOrderStatusCommand, bool>
+public class SetAwaitingPaymentOrderStatusCommandHandler(IOrderRepository orderRepository) : IRequestHandler<SetAwaitingPaymentOrderStatusCommand, bool>
 {
 
     /// <summary>
@@ -10,7 +10,7 @@ public class SetAwaitingValidationOrderStatusCommandHandler(IOrderRepository ord
     /// </summary>
     /// <param name="command"></param>
     /// <returns></returns>
-    public async Task<bool> Handle(SetAwaitingValidationOrderStatusCommand command, CancellationToken cancellationToken)
+    public async Task<bool> Handle(SetAwaitingPaymentOrderStatusCommand command, CancellationToken cancellationToken)
     {
         var orderToUpdate = await orderRepository.GetAsync(command.OrderId);
         if (orderToUpdate == null)
@@ -18,18 +18,18 @@ public class SetAwaitingValidationOrderStatusCommandHandler(IOrderRepository ord
             return false;
         }
 
-        orderToUpdate.SetAwaitingValidationStatus();
+        orderToUpdate.SetAwaitingPaymentStatus();
         return await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }
 
 
 // Use for Idempotency in Command process
-public class SetAwaitingValidationIdentifiedOrderStatusCommandHandler(
+public class SetAwaitingPaymentIdentifiedOrderStatusCommandHandler(
     IMediator mediator,
     IRequestManager requestManager,
-    ILogger<IdentifiedCommandHandler<SetAwaitingValidationOrderStatusCommand, bool>> logger)
-    : IdentifiedCommandHandler<SetAwaitingValidationOrderStatusCommand, bool>(mediator, requestManager, logger)
+    ILogger<IdentifiedCommandHandler<SetAwaitingPaymentOrderStatusCommand, bool>> logger)
+    : IdentifiedCommandHandler<SetAwaitingPaymentOrderStatusCommand, bool>(mediator, requestManager, logger)
 {
     protected override bool CreateResultForDuplicateRequest()
     {

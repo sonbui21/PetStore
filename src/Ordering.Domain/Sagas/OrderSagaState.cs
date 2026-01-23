@@ -24,9 +24,9 @@ public class OrderSagaState : IAggregateRoot
         return new OrderSagaState(orderId, OrderSagaStep.Started);
     }
 
-    public void MarkAwaitingValidation()
+    public void MarkAwaitingPayment()
     {
-        TransitionTo(OrderSagaStep.AwaitingValidation);
+        TransitionTo(OrderSagaStep.AwaitingPayment);
     }
 
     public void MarkStockConfirmed()
@@ -39,9 +39,9 @@ public class OrderSagaState : IAggregateRoot
         TransitionTo(OrderSagaStep.StockRejected);
     }
 
-    public void MarkPaymentSucceeded()
+    public void MarkPaymentConfirmed()
     {
-        TransitionTo(OrderSagaStep.PaymentSucceeded);
+        TransitionTo(OrderSagaStep.PaymentConfirmed);
     }
 
     public void MarkPaymentFailed()

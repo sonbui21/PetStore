@@ -1,21 +1,21 @@
 ﻿namespace PaymentProcessor.IntegrationEvents.EventHandling;
 
-public class OrderStatusChangedToStockConfirmedIntegrationEventHandler(
+public class OrderStatusChangedToAwaitingPaymentIntegrationEventHandler(
     IEventBus eventBus,
     IOptionsMonitor<PaymentOptions> options,
-    ILogger<OrderStatusChangedToStockConfirmedIntegrationEventHandler> logger) :
-    IIntegrationEventHandler<OrderStatusChangedToStockConfirmedIntegrationEvent>
+    ILogger<OrderStatusChangedToAwaitingPaymentIntegrationEventHandler> logger) :
+    IIntegrationEventHandler<OrderStatusChangedToAwaitingPaymentIntegrationEvent>
 {
-    public async Task Handle(OrderStatusChangedToStockConfirmedIntegrationEvent @event)
+    public async Task Handle(OrderStatusChangedToAwaitingPaymentIntegrationEvent @event)
     {
         logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
 
         IntegrationEvent orderPaymentIntegrationEvent;
 
         // Business feature comment:
-        // When OrderStatusChangedToStockConfirmed Integration Event is handled.
-        // Here we're simulating that we'd be performing the payment against any payment gateway
-        // Instead of a real payment we just take the env. var to simulate the payment 
+        // When OrderStatusChangedToAwaitingPayment Integration Event is handled.
+        // Here we're simulating payment authorization (Stripe-style).
+        // Instead of a real payment we just take the env. var to simulate the payment
         // The payment can be successful or it can fail
 
         if (options.CurrentValue.PaymentSucceeded)

@@ -1,12 +1,12 @@
 ﻿namespace Catalog.API.IntegrationEvents.EventHandling;
 
-public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler(
+public class OrderStatusChangedToPaymentConfirmedIntegrationEventHandler(
     CatalogContext catalogContext,
     ICatalogIntegrationEventService catalogIntegrationEventService,
-    ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler> logger) :
-    IIntegrationEventHandler<OrderStatusChangedToAwaitingValidationIntegrationEvent>
+    ILogger<OrderStatusChangedToPaymentConfirmedIntegrationEventHandler> logger) :
+    IIntegrationEventHandler<OrderStatusChangedToPaymentConfirmedIntegrationEvent>
 {
-    public async Task Handle(OrderStatusChangedToAwaitingValidationIntegrationEvent @event)
+    public async Task Handle(OrderStatusChangedToPaymentConfirmedIntegrationEvent @event)
     {
         logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
 
@@ -33,4 +33,3 @@ public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler(
         await catalogIntegrationEventService.PublishThroughEventBusAsync(confirmedIntegrationEvent);
     }
 }
-
