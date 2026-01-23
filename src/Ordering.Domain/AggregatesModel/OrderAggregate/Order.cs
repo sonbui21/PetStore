@@ -91,9 +91,26 @@ public class Order : Entity, IAggregateRoot
         }
     }
 
+    public void SetAwaitingPaymentStatus()
+    {
+        if (OrderStatus == OrderStatus.Submitted)
+        {
+            AddDomainEvent(new OrderStatusChangedToAwaitingPaymentDomainEvent(Id));
+            OrderStatus = OrderStatus.AwaitingPayment;
+            Description = "Awaiting payment authorization.";
+        }
+    }
+
     public void SetStockConfirmedStatus()
     {
-        if (OrderStatus == OrderStatus.AwaitingValidation)
+        if (OrderStatus == OrderStatus.PaymentConfirmed)
+        {
+            AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(Id, OrderItems));
+
+            OrderStatus = OrderStatus.Paid;
+            Description = "The payment was authorized and stock was reserved.";
+        }
+        else if (OrderStatus == OrderStatus.AwaitingValidation)
         {
             AddDomainEvent(new OrderStatusChangedToStockConfirmedDomainEvent(Id));
 
@@ -111,6 +128,23 @@ public class Order : Entity, IAggregateRoot
             OrderStatus = OrderStatus.Paid;
             // TODO
             Description = "The payment was performed at a simulated \"American Bank checking bank account ending on XX35071\"";
+        }
+    }
+
+    public void SetPaymentConfirmedStatus()
+    {
+        if (OrderStatus == OrderStatus.StockConfirmed)
+        {
+            AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(Id, OrderItems));
+
+            OrderStatus = OrderStatus.Paid;
+            Description = "The payment was authorized and stock was reserved.";
+        }
+        else if (OrderStatus == OrderStatus.AwaitingPayment)
+        {
+            AddDomainEvent(new OrderStatusChangedToPaymentConfirmedDomainEvent(Id, OrderItems));
+            OrderStatus = OrderStatus.PaymentConfirmed;
+            Description = "Payment authorized; awaiting stock reservation.";
         }
     }
 
@@ -141,7 +175,7 @@ public class Order : Entity, IAggregateRoot
 
     public void SetCancelledStatusWhenStockIsRejected(IEnumerable<Guid> orderStockRejectedItems)
     {
-        if (OrderStatus == OrderStatus.AwaitingValidation)
+        if (OrderStatus == OrderStatus.AwaitingValidation || OrderStatus == OrderStatus.PaymentConfirmed)
         {
             OrderStatus = OrderStatus.Cancelled;
 
@@ -172,4 +206,3 @@ public class Order : Entity, IAggregateRoot
 
     public decimal GetTotal() => _orderItems.Sum(o => o.Quantity * o.Price);
 }
-
