@@ -4,8 +4,10 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
     public CreateOrderCommandValidator(ILogger<CreateOrderCommandValidator> logger)
     {
-        RuleFor(command => command.City).NotEmpty();
+        RuleFor(command => command.Name).NotEmpty();
+        RuleFor(command => command.Phone).NotEmpty();
         RuleFor(command => command.Street).NotEmpty();
+        RuleFor(command => command.City).NotEmpty();
         RuleFor(command => command.State).NotEmpty();
         RuleFor(command => command.Country).NotEmpty();
         RuleFor(command => command.ZipCode).NotEmpty();

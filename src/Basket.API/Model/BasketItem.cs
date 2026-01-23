@@ -1,6 +1,6 @@
 ﻿namespace Basket.API.Model;
 
-public class BasketItem : IValidatableObject
+public class BasketItemModel : IValidatableObject
 {
     public string ProductId { get; set; }
     public string VariantId { get; set; }

@@ -24,10 +24,16 @@ public class CreateOrderCommand : IRequest<bool>
     public string UserName { get; private set; }
 
     [DataMember]
-    public string City { get; private set; }
+    public string Name { get; private set; }
+
+    [DataMember]
+    public string Phone { get; private set; }
 
     [DataMember]
     public string Street { get; private set; }
+
+    [DataMember]
+    public string City { get; private set; }
 
     [DataMember]
     public string State { get; private set; }
@@ -61,14 +67,16 @@ public class CreateOrderCommand : IRequest<bool>
         _orderItems = [];
     }
 
-    public CreateOrderCommand(List<BasketItem> basketItems, Guid orderId, string userId, string userName, string city, string street, string state, string country,   
-        string zipcode, string cardNumber, string cardHolderName, DateTime cardExpiration,
-        string cardSecurityNumber, int cardTypeId)
+    public CreateOrderCommand(List<BasketItem> basketItems, Guid orderId, string userId, string userName,
+        string name, string phone, string city, string street, string state, string country, string zipcode,
+        string cardNumber, string cardHolderName, DateTime cardExpiration, string cardSecurityNumber, int cardTypeId)
     {
         _orderItems = [.. basketItems.ToOrderItemsDto()];
         OrderId = orderId;
         UserId = userId;
         UserName = userName;
+        Name = name;
+        Phone = phone;
         City = city;
         Street = street;
         State = state;

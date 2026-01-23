@@ -28,7 +28,8 @@ public class OrderQueries(OrderingContext context) : IOrderQueries
                 Title = oi.Title,
                 Slug = oi.Slug,
                 Thumbnail = oi.Thumbnail,
-                Price = oi.Price
+                Price = oi.Price,
+                VariantOptions = oi.VariantOptions
             })]
         };
     }

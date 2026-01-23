@@ -1,8 +1,4 @@
-﻿using CustomerBasketModel = Basket.API.Model.CustomerBasket;
-using AddressModel = Basket.API.Model.Address;
-using BasketItemModel = Basket.API.Model.BasketItem;
-
-namespace Basket.API.Grpc;
+﻿namespace Basket.API.Grpc;
 
 public class BasketService(
     IBasketRepository repository,
@@ -113,6 +109,12 @@ public class BasketService(
         return MapToCustomerBasketResponse(response);
     }
 
+    [DoesNotReturn]
+    private static void ThrowNotAuthenticated() => throw new RpcException(new Status(StatusCode.Unauthenticated, "The caller is not authenticated."));
+
+    [DoesNotReturn]
+    private static void ThrowBasketDoesNotExist(string userId) => throw new RpcException(new Status(StatusCode.NotFound, $"Basket with buyer id {userId} does not exist"));
+
     private static CustomerBasketModel MergeBaskets(CustomerBasketModel userCart, CustomerBasketModel guestCart)
     {
         var mergedCart = new CustomerBasketModel
@@ -163,7 +165,7 @@ public class BasketService(
             }
             else
             {
-                itemMap[key] = new Model.BasketItem
+                itemMap[key] = new BasketItemModel
                 {
                     ProductId = item.ProductId,
                     VariantId = item.VariantId,
@@ -181,12 +183,6 @@ public class BasketService(
         mergedCart.Items = [.. itemMap.Values];
         return mergedCart;
     }
-
-    [DoesNotReturn]
-    private static void ThrowNotAuthenticated() => throw new RpcException(new Status(StatusCode.Unauthenticated, "The caller is not authenticated."));
-
-    [DoesNotReturn]
-    private static void ThrowBasketDoesNotExist(string userId) => throw new RpcException(new Status(StatusCode.NotFound, $"Basket with buyer id {userId} does not exist"));
 
     private static CustomerBasket MapToCustomerBasketResponse(CustomerBasketModel customerBasket)
     {

@@ -1,22 +1,22 @@
 ﻿namespace Basket.API.Model;
 
-public class CustomerBasket
+public class CustomerBasketModel
 {
     public string BasketId { get; set; }
-    public List<BasketItem> Items { get; set; } = [];
-    public Address ShippingAddress { get; set; }
+    public List<BasketItemModel> Items { get; set; } = [];
+    public AddressModel ShippingAddress { get; set; }
     public string PaymentCollection { get; set; }
 
-    public CustomerBasket() { }
+    public CustomerBasketModel() { }
 
-    public CustomerBasket(string customerId)
+    public CustomerBasketModel(string customerId)
     {
         BasketId = customerId;
         PaymentCollection = "";
     }
 }
 
-public class Address
+public class AddressModel
 {
     public string Name { get; set; }
     public string Phone { get; set; }

@@ -1,10 +1,9 @@
-﻿using CustomerBasket = Basket.API.Model.CustomerBasket;
-
+﻿
 namespace Basket.API.Repositories;
 
 public interface IBasketRepository
 {
-    Task<CustomerBasket> GetBasketAsync(string customerId);
-    Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);
+    Task<CustomerBasketModel> GetBasketAsync(string customerId);
+    Task<CustomerBasketModel> UpdateBasketAsync(CustomerBasketModel basket);
     Task<bool> DeleteBasketAsync(string id);
 }

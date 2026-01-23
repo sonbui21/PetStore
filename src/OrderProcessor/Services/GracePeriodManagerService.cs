@@ -1,10 +1,10 @@
 ﻿namespace OrderProcessor.Services;
 
 public class GracePeriodManagerService(
-        IOptions<BackgroundTaskOptions> options,
-        IEventBus eventBus,
-        ILogger<GracePeriodManagerService> logger,
-        NpgsqlDataSource dataSource) : BackgroundService
+    IOptions<BackgroundTaskOptions> options,
+    IEventBus eventBus,
+    ILogger<GracePeriodManagerService> logger,
+    NpgsqlDataSource dataSource) : BackgroundService
 {
     private readonly BackgroundTaskOptions _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
@@ -49,7 +49,8 @@ public class GracePeriodManagerService(
         {
             var confirmGracePeriodEvent = new GracePeriodConfirmedIntegrationEvent(orderId);
 
-            logger.LogInformation("Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", confirmGracePeriodEvent.Id, confirmGracePeriodEvent);
+            logger.LogInformation("Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})",
+                confirmGracePeriodEvent.Id, confirmGracePeriodEvent);
 
             await eventBus.PublishAsync(confirmGracePeriodEvent);
         }

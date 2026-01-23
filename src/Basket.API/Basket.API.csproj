@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Proto\basket.proto" GrpcServices="Server" />
+		<Protobuf Include="Grpc\basket.proto" GrpcServices="Server" />
 	</ItemGroup>
 
 	<ItemGroup>

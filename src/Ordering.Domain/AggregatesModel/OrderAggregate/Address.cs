@@ -2,6 +2,8 @@
 
 public class Address : ValueObject
 {
+    public string Name { get; private set; }
+    public string Phone { get; private set; }
     public string Street { get; private set; }
     public string City { get; private set; }
     public string State { get; private set; }
@@ -10,8 +12,10 @@ public class Address : ValueObject
 
     public Address() { }
 
-    public Address(string street, string city, string state, string country, string zipcode)
+    public Address(string name, string phone, string street, string city, string state, string country, string zipcode)
     {
+        Name = name;
+        Phone = phone;
         Street = street;
         City = city;
         State = state;
@@ -22,6 +26,8 @@ public class Address : ValueObject
     protected override IEnumerable<object> GetEqualityComponents()
     {
         // Using a yield return statement to return each element one at a time
+        yield return Name;
+        yield return Phone;
         yield return Street;
         yield return City;
         yield return State;

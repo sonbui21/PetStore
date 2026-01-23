@@ -27,7 +27,7 @@ public static class OrdersApi
         return TypedResults.Ok(orders);
     }
 
-    public static async Task<Results<Ok<CreateOrderResponse>, BadRequest<string>>> CreateOrderAsync(
+    public static async Task<Results<Ok, BadRequest<string>>> CreateOrderAsync(
         [FromHeader(Name = "x-requestid")] Guid requestId,
         CreateOrderRequest request,
         [AsParameters] OrderServices services)
@@ -52,10 +52,9 @@ public static class OrdersApi
 
             var orderId = Guid.NewGuid();
 
-            var createOrderCommand = new CreateOrderCommand(request.Items, orderId, request.UserId, request.UserName, request.City, request.Street,
-                request.State, request.Country, request.ZipCode,
-                maskedCCNumber, request.CardHolderName, request.CardExpiration,
-                request.CardSecurityNumber, request.CardTypeId);
+            var createOrderCommand = new CreateOrderCommand(request.Items, orderId, request.UserId, request.UserName,
+                request.Name, request.Phone, request.City, request.Street, request.State, request.Country, request.ZipCode,
+                maskedCCNumber, request.CardHolderName, request.CardExpiration, request.CardSecurityNumber, request.CardTypeId);
 
             var requestCreateOrder = new IdentifiedCommand<CreateOrderCommand, bool>(createOrderCommand, requestId);
 
@@ -71,13 +70,13 @@ public static class OrdersApi
             if (result)
             {
                 services.Logger.LogInformation("CreateOrderCommand succeeded - RequestId: {RequestId}", requestId);
+                return TypedResults.Ok();
             }
             else
             {
                 services.Logger.LogWarning("CreateOrderCommand failed - RequestId: {RequestId}", requestId);
+                return TypedResults.BadRequest("Failed to place order.");
             }
-
-            return TypedResults.Ok(new CreateOrderResponse(OrderId: orderId, Status: "Created"));
         }
     }
 
@@ -99,6 +98,8 @@ public record CreateOrderRequest(
     string UserId,
     string UserName,
     string Street,
+    string Name,
+    string Phone,
     string City,
     string State,
     string Country,
@@ -110,8 +111,3 @@ public record CreateOrderRequest(
     int CardTypeId,
     string Buyer,
     List<BasketItem> Items);
-
-public record CreateOrderResponse(
-    Guid OrderId,
-    string Status
-);
