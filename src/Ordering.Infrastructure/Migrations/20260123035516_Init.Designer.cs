@@ -12,7 +12,7 @@ using Ordering.Infrastructure;
 namespace Ordering.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20260122081811_Init")]
+    [Migration("20260123035516_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -267,6 +267,12 @@ namespace Ordering.Infrastructure.Migrations
                                 .HasColumnType("text");
 
                             b1.Property<string>("Country")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Name")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Phone")
                                 .HasColumnType("text");
 
                             b1.Property<string>("State")

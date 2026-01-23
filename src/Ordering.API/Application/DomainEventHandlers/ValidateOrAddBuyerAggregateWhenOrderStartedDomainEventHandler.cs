@@ -37,10 +37,11 @@ public class ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler(
             _buyerRepository.Add(buyer);
         }
 
-        await _buyerRepository.UnitOfWork
-            .SaveEntitiesAsync(cancellationToken);
+        await _buyerRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        var integrationEvent = new OrderStatusChangedToSubmittedIntegrationEvent(domainEvent.Order.Id, domainEvent.Order.OrderStatus, buyer.Name, buyer.IdentityGuid);
+        var integrationEvent = new OrderStatusChangedToSubmittedIntegrationEvent(
+            domainEvent.Order.Id, domainEvent.Order.OrderStatus, buyer.Name, buyer.IdentityGuid);
+
         await _orderingIntegrationEventService.AddAndSaveEventAsync(integrationEvent);
         OrderingApiTrace.LogOrderBuyerAndPaymentValidatedOrUpdated(_logger, buyer.Id, domainEvent.Order.Id);
     }

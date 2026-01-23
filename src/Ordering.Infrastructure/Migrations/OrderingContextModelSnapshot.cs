@@ -266,6 +266,12 @@ namespace Ordering.Infrastructure.Migrations
                             b1.Property<string>("Country")
                                 .HasColumnType("text");
 
+                            b1.Property<string>("Name")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Phone")
+                                .HasColumnType("text");
+
                             b1.Property<string>("State")
                                 .HasColumnType("text");
 

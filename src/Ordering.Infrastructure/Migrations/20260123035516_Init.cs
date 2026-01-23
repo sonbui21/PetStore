@@ -115,6 +115,8 @@ namespace Ordering.Infrastructure.Migrations
                     OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     OrderStatus = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    Address_Name = table.Column<string>(type: "text", nullable: true),
+                    Address_Phone = table.Column<string>(type: "text", nullable: true),
                     Address_Street = table.Column<string>(type: "text", nullable: true),
                     Address_City = table.Column<string>(type: "text", nullable: true),
                     Address_State = table.Column<string>(type: "text", nullable: true),

@@ -154,8 +154,9 @@ public class Order : Entity, IAggregateRoot
         }
     }
 
-    private void AddOrderStartedDomainEvent(string userId, string userName, int cardTypeId, string cardNumber,
-            string cardSecurityNumber, string cardHolderName, DateTime cardExpiration)
+    private void AddOrderStartedDomainEvent(
+        string userId, string userName, int cardTypeId, string cardNumber,
+        string cardSecurityNumber, string cardHolderName, DateTime cardExpiration)
     {
         var orderStartedDomainEvent = new OrderStartedDomainEvent(this, userId, userName, cardTypeId,
                                                                     cardNumber, cardSecurityNumber,

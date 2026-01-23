@@ -12,7 +12,7 @@ public class SetPaidOrderStatusCommandHandler(IOrderRepository orderRepository) 
     /// <returns></returns>
     public async Task<bool> Handle(SetPaidOrderStatusCommand command, CancellationToken cancellationToken)
     {
-        // Simulate a work time for validating the payment
+        // TODO Simulate a work time for validating the payment
         await Task.Delay(10000, cancellationToken);
 
         var orderToUpdate = await orderRepository.GetAsync(command.OrderId);
