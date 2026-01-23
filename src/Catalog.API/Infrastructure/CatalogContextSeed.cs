@@ -48,13 +48,13 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
     {
         return new List<Category>
         {
-            new() { Id = Guid.NewGuid(), Index = 0, Name = "New Arrivals",     Slug = "collections/new-at-petpal" },
-            new() { Id = Guid.NewGuid(), Index = 1, Name = "Beds & Blankets",  Slug = "collections/beds" },
-            new() { Id = Guid.NewGuid(), Index = 2, Name = "Dog Food",         Slug = "collections/dog-food" },
-            new() { Id = Guid.NewGuid(), Index = 3, Name = "Cat Food",         Slug = "collections/cat-food" },
-            new() { Id = Guid.NewGuid(), Index = 4, Name = "Pet Toys",         Slug = "collections/pet-toys" },
-            new() { Id = Guid.NewGuid(), Index = 5, Name = "Accessories",      Slug = "collections/accessories" },
-            new() { Id = Guid.NewGuid(), Index = 6, Name = "Premium",          Slug = "collections/premium" },
+            new() { Id = Guid.CreateVersion7(), Index = 0, Name = "New Arrivals",     Slug = "collections/new-at-petpal" },
+            new() { Id = Guid.CreateVersion7(), Index = 1, Name = "Beds & Blankets",  Slug = "collections/beds" },
+            new() { Id = Guid.CreateVersion7(), Index = 2, Name = "Dog Food",         Slug = "collections/dog-food" },
+            new() { Id = Guid.CreateVersion7(), Index = 3, Name = "Cat Food",         Slug = "collections/cat-food" },
+            new() { Id = Guid.CreateVersion7(), Index = 4, Name = "Pet Toys",         Slug = "collections/pet-toys" },
+            new() { Id = Guid.CreateVersion7(), Index = 5, Name = "Accessories",      Slug = "collections/accessories" },
+            new() { Id = Guid.CreateVersion7(), Index = 6, Name = "Premium",          Slug = "collections/premium" },
         };
     }
 
@@ -204,7 +204,7 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
 
                 var item = new CatalogItem
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.CreateVersion7(),
                     Slug = uniqueSlug,
                     Title = uniqueTitle,
                     Price = 60M,
@@ -215,7 +215,7 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
 
                     ItemOptions = template.Options.Select(o => new ItemOption
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.CreateVersion7(),
                         Name = o.Name,
                         Values = o.Values.ToList()
                     }).ToList()
@@ -300,7 +300,7 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
 
             return new ItemVariant
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 CatalogItemId = item.Id,
                 Title = title,
                 Price = Math.Round(variantPrice, 2),
@@ -310,7 +310,7 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
                 Options = [.. selectedOptions.Select(o =>
                     new ItemVariantOption
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.CreateVersion7(),
                         Name = o.Name,
                         Value = o.Value
                     })]
@@ -327,7 +327,7 @@ public partial class CatalogContextSeed(ILogger<CatalogContextSeed> logger) : ID
 
         var nonPremium = allCategories
             .Where(c => c.Id != premium.Id)
-            .OrderBy(_ => Guid.NewGuid())
+            .OrderBy(_ => Guid.CreateVersion7())
             .Take(randomCount)
             .ToList();
 

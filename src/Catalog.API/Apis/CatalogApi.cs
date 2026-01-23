@@ -105,7 +105,7 @@ public static partial class CatalogApi
         }
 
         var category = services.Mapper.Map<Category>(request);
-        category.Id = Guid.NewGuid();
+        category.Id = Guid.CreateVersion7();
 
         services.Context.Categories.Add(category);
         await services.Context.SaveChangesAsync(cancellationToken);

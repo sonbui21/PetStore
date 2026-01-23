@@ -50,7 +50,7 @@ public static class OrdersApi
         {
             var maskedCCNumber = request.CardNumber[^4..].PadLeft(request.CardNumber.Length, 'X');
 
-            var orderId = Guid.NewGuid();
+            var orderId = Guid.CreateVersion7();
 
             var createOrderCommand = new CreateOrderCommand(request.Items, orderId, request.UserId, request.UserName,
                 request.Name, request.Phone, request.City, request.Street, request.State, request.Country, request.ZipCode,

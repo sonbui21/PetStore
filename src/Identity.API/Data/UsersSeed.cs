@@ -19,7 +19,7 @@ public class UsersSeed(ILogger<UsersSeed> logger, UserManager<ApplicationUser> u
                 City = "Redmond",
                 Country = "U.S.",
                 Expiration = "12/24",
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.CreateVersion7().ToString(),
                 LastName = "Smith",
                 Name = "Bruce",
                 PhoneNumber = "1234567890",
