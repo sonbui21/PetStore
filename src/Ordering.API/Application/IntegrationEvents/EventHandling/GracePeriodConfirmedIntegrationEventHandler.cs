@@ -1,7 +1,7 @@
 ﻿namespace Ordering.API.Application.IntegrationEvents.EventHandling;
 
 public class GracePeriodConfirmedIntegrationEventHandler(
-    IMediator mediator,
+    IOrderSagaOrchestrator orchestrator,
     ILogger<GracePeriodConfirmedIntegrationEventHandler> logger) : IIntegrationEventHandler<GracePeriodConfirmedIntegrationEvent>
 {
     /// <summary>
@@ -16,15 +16,6 @@ public class GracePeriodConfirmedIntegrationEventHandler(
     {
         logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
 
-        var command = new SetAwaitingValidationOrderStatusCommand(@event.OrderId);
-
-        logger.LogInformation(
-            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-            command.GetGenericTypeName(),
-            nameof(command.OrderId),
-            command.OrderId,
-            command);
-
-        await mediator.Send(command);
+        await orchestrator.HandleGracePeriodConfirmedAsync(@event.OrderId);
     }
 }

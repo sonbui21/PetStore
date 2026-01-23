@@ -1,7 +1,7 @@
 ﻿namespace Ordering.API.Application.IntegrationEvents.EventHandling;
 
 public class OrderPaymentSucceededIntegrationEventHandler(
-    IMediator mediator,
+    IOrderSagaOrchestrator orchestrator,
     ILogger<OrderPaymentSucceededIntegrationEventHandler> logger) :
     IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>
 {
@@ -9,15 +9,6 @@ public class OrderPaymentSucceededIntegrationEventHandler(
     {
         logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
 
-        var command = new SetPaidOrderStatusCommand(@event.OrderId);
-
-        logger.LogInformation(
-            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-            command.GetGenericTypeName(),
-            nameof(command.OrderId),
-            command.OrderId,
-            command);
-
-        await mediator.Send(command);
+        await orchestrator.HandlePaymentSucceededAsync(@event.OrderId);
     }
 }

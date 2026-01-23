@@ -47,6 +47,8 @@ internal static class Extensions
         services.AddScoped<IOrderQueries, OrderQueries>();
         services.AddScoped<IBuyerRepository, BuyerRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderSagaRepository, OrderSagaRepository>();
+        services.AddScoped<IOrderSagaOrchestrator, OrderSagaOrchestrator>();
         services.AddScoped<IRequestManager, RequestManager>();
     }
 
@@ -65,4 +67,3 @@ internal static class Extensions
         eventBus.AddSubscription<OrderPaymentSucceededIntegrationEvent, OrderPaymentSucceededIntegrationEventHandler>();
     }
 }
-

@@ -10,5 +10,6 @@ global using Ordering.Domain.SeedWork;
 global using IntegrationEventLogEF;
 global using Ordering.Domain.AggregatesModel.BuyerAggregate;
 global using Ordering.Domain.AggregatesModel.OrderAggregate;
+global using Ordering.Domain.Sagas;
 global using Ordering.Infrastructure.EntityConfigurations;
 global using Ordering.Domain.Exceptions;
