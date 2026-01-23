@@ -44,6 +44,7 @@ public class CreateOrderCommandHandler(
         _logger.LogInformation("Creating Order - Order: {@Order}", order);
 
         _orderRepository.Add(order);
+
         await _orderSagaOrchestrator.StartSagaAsync(order.Id);
 
         return await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

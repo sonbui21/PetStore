@@ -28,7 +28,9 @@ public class OrderSagaOrchestrator(
     public async Task HandleGracePeriodConfirmedAsync(Guid orderId)
     {
         var saga = await GetOrCreateSagaAsync(orderId);
+
         saga.MarkAwaitingValidation();
+
         _sagaRepository.Update(saga);
         await _sagaRepository.UnitOfWork.SaveEntitiesAsync();
 
@@ -39,7 +41,9 @@ public class OrderSagaOrchestrator(
     public async Task HandleStockConfirmedAsync(Guid orderId)
     {
         var saga = await GetOrCreateSagaAsync(orderId);
+
         saga.MarkStockConfirmed();
+
         _sagaRepository.Update(saga);
         await _sagaRepository.UnitOfWork.SaveEntitiesAsync();
 
@@ -50,8 +54,10 @@ public class OrderSagaOrchestrator(
     public async Task HandleStockRejectedAsync(Guid orderId, List<Guid> orderStockItems)
     {
         var saga = await GetOrCreateSagaAsync(orderId);
+
         saga.MarkStockRejected();
         saga.MarkCancelled();
+
         _sagaRepository.Update(saga);
         await _sagaRepository.UnitOfWork.SaveEntitiesAsync();
 
@@ -62,8 +68,10 @@ public class OrderSagaOrchestrator(
     public async Task HandlePaymentSucceededAsync(Guid orderId)
     {
         var saga = await GetOrCreateSagaAsync(orderId);
+
         saga.MarkPaymentSucceeded();
         saga.MarkCompleted();
+
         _sagaRepository.Update(saga);
         await _sagaRepository.UnitOfWork.SaveEntitiesAsync();
 
@@ -74,8 +82,10 @@ public class OrderSagaOrchestrator(
     public async Task HandlePaymentFailedAsync(Guid orderId)
     {
         var saga = await GetOrCreateSagaAsync(orderId);
+
         saga.MarkPaymentFailed();
         saga.MarkCancelled();
+
         _sagaRepository.Update(saga);
         await _sagaRepository.UnitOfWork.SaveEntitiesAsync();
 

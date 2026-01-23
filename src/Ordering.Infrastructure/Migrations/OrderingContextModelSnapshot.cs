@@ -209,6 +209,34 @@ namespace Ordering.Infrastructure.Migrations
                     b.ToTable("orderItems", "ordering");
                 });
 
+            modelBuilder.Entity("Ordering.Domain.Sagas.OrderSagaState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CurrentStep")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("ordersagas", "ordering");
+                });
+
             modelBuilder.Entity("Ordering.Infrastructure.Idempotency.ClientRequest", b =>
                 {
                     b.Property<Guid>("Id")

@@ -60,6 +60,22 @@ namespace Ordering.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ordersagas",
+                schema: "ordering",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CurrentStep = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ordersagas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "requests",
                 schema: "ordering",
                 columns: table => new
@@ -196,6 +212,13 @@ namespace Ordering.Infrastructure.Migrations
                 column: "PaymentMethodId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ordersagas_OrderId",
+                schema: "ordering",
+                table: "ordersagas",
+                column: "OrderId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_paymentmethods_BuyerId",
                 schema: "ordering",
                 table: "paymentmethods",
@@ -217,6 +240,10 @@ namespace Ordering.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "orderItems",
+                schema: "ordering");
+
+            migrationBuilder.DropTable(
+                name: "ordersagas",
                 schema: "ordering");
 
             migrationBuilder.DropTable(
