@@ -1,7 +1,7 @@
 ﻿namespace Ordering.API.Application.IntegrationEvents.EventHandling;
 
 public class OrderPaymentFailedIntegrationEventHandler(
-    IMediator mediator,
+    IOrderSagaOrchestrator orchestrator,
     ILogger<OrderPaymentFailedIntegrationEventHandler> logger) :
     IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>
 {
@@ -9,15 +9,6 @@ public class OrderPaymentFailedIntegrationEventHandler(
     {
         logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
 
-        var command = new CancelOrderCommand(@event.OrderId);
-
-        logger.LogInformation(
-            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-            command.GetGenericTypeName(),
-            nameof(command.OrderId),
-            command.OrderId,
-            command);
-
-        await mediator.Send(command);
+        await orchestrator.HandlePaymentFailedAsync(@event.OrderId);
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Ordering.API.Application.IntegrationEvents.EventHandling;
 
 public class OrderStockRejectedIntegrationEventHandler(
-    IMediator mediator,
+    IOrderSagaOrchestrator orchestrator,
     ILogger<OrderStockRejectedIntegrationEventHandler> logger) : IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>
 {
     public async Task Handle(OrderStockRejectedIntegrationEvent @event)
@@ -13,15 +13,6 @@ public class OrderStockRejectedIntegrationEventHandler(
             .Select(c => c.ProductId)
             .ToList();
 
-        var command = new SetStockRejectedOrderStatusCommand(@event.OrderId, orderStockRejectedItems);
-
-        logger.LogInformation(
-            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-            command.GetGenericTypeName(),
-            nameof(command.OrderId),
-            command.OrderId,
-            command);
-
-        await mediator.Send(command);
+        await orchestrator.HandleStockRejectedAsync(@event.OrderId, orderStockRejectedItems);
     }
 }

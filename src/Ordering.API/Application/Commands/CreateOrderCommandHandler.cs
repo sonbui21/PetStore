@@ -6,6 +6,7 @@ namespace Ordering.API.Application.Commands;
 public class CreateOrderCommandHandler(
     IOrderingIntegrationEventService orderingIntegrationEventService,
     IOrderRepository orderRepository,
+    IOrderSagaOrchestrator orderSagaOrchestrator,
     ILogger<CreateOrderCommandHandler> logger) : IRequestHandler<CreateOrderCommand, bool>
 {
     private readonly IOrderRepository _orderRepository = orderRepository
@@ -13,6 +14,9 @@ public class CreateOrderCommandHandler(
 
     private readonly IOrderingIntegrationEventService _orderingIntegrationEventService = orderingIntegrationEventService
         ?? throw new ArgumentNullException(nameof(orderingIntegrationEventService));
+
+    private readonly IOrderSagaOrchestrator _orderSagaOrchestrator = orderSagaOrchestrator
+        ?? throw new ArgumentNullException(nameof(orderSagaOrchestrator));
 
     private readonly ILogger<CreateOrderCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -40,6 +44,8 @@ public class CreateOrderCommandHandler(
         _logger.LogInformation("Creating Order - Order: {@Order}", order);
 
         _orderRepository.Add(order);
+
+        await _orderSagaOrchestrator.StartSagaAsync(order.Id);
 
         return await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
