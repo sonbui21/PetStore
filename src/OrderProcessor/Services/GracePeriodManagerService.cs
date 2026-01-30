@@ -65,7 +65,7 @@ public class GracePeriodManagerService(
             command.CommandText = """
                     SELECT "Id"
                     FROM ordering.orders
-                    WHERE CURRENT_TIMESTAMP - "OrderDate" >= @GracePeriodTime AND "OrderStatus" = 'Submitted'
+                    WHERE CURRENT_TIMESTAMP - "OrderDate" >= @GracePeriodTime AND "OrderStatus" = 'PaymentConfirmed'
                     """;
             command.Parameters.AddWithValue("GracePeriodTime", TimeSpan.FromMinutes(_options.GracePeriodTime));
 

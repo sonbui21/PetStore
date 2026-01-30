@@ -10,7 +10,7 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
-app.MapOrdersApi()
+app.MapPaymentsApi()
     .RequireAuthorization();
 
 app.UseDefaultOpenApi();

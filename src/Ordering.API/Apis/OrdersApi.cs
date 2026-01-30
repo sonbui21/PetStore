@@ -20,25 +20,16 @@ public static class OrdersApi
         return api;
     }
 
-    public static async Task<Ok<ResultList<OrderSummary>>> GetOrdersByUserAsync([AsParameters] OrderServices services)
-    {
-        var userId = services.IdentityService.GetUserIdentity();
-        var orders = await services.Queries.GetOrdersFromUserAsync(userId);
-        return TypedResults.Ok(orders);
-    }
-
-    public static async Task<Results<Ok, BadRequest<string>>> CreateOrderAsync(
+    public static async Task<Results<Ok<string>, BadRequest<string>>> CreateOrderAsync(
         [FromHeader(Name = "x-requestid")] Guid requestId,
         CreateOrderRequest request,
         [AsParameters] OrderServices services)
     {
-        //mask the credit card number
-
         services.Logger.LogInformation(
             "Sending command: {CommandName} - {IdProperty}: {CommandId}",
             request.GetGenericTypeName(),
             nameof(request.UserId),
-            request.UserId); //don't log the request as it has CC number
+            request.UserId);
 
         if (requestId == Guid.Empty)
         {
@@ -70,7 +61,7 @@ public static class OrdersApi
             if (result)
             {
                 services.Logger.LogInformation("CreateOrderCommand succeeded - RequestId: {RequestId}", requestId);
-                return TypedResults.Ok();
+                return TypedResults.Ok(orderId.ToString());
             }
             else
             {
@@ -78,6 +69,13 @@ public static class OrdersApi
                 return TypedResults.BadRequest("Failed to place order.");
             }
         }
+    }
+
+    public static async Task<Ok<ResultList<OrderSummary>>> GetOrdersByUserAsync([AsParameters] OrderServices services)
+    {
+        var userId = services.IdentityService.GetUserIdentity();
+        var orders = await services.Queries.GetOrdersFromUserAsync(userId);
+        return TypedResults.Ok(orders);
     }
 
     public static async Task<Results<Ok<Order>, NotFound>> GetOrderAsync(Guid orderId, [AsParameters] OrderServices services)

@@ -31,18 +31,20 @@ var orderingApi = builder.AddProject<Projects.Ordering_API>("ordering-api")
     .WithHttpHealthCheck("/health")
     .WithEnvironment("Identity__Url", identityEndpoint);
 
+var paymentApi = builder.AddProject<Projects.Payment_API>("payment-api")
+    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithHttpHealthCheck("/health")
+    .WithEnvironment("Identity__Url", identityEndpoint);
+
 builder.AddProject<Projects.OrderProcessor>("order-processor")
     .WithReference(rabbitMq).WaitFor(rabbitMq)
     //.WithReference(orderDb)
     .WaitFor(orderingApi);
 
-builder.AddProject<Projects.PaymentProcessor>("payment-processor")
-    .WithReference(rabbitMq).WaitFor(rabbitMq);
-
 // Identity has a reference to all of the apps for callback urls, this is a cyclic reference
-identityApi.WithEnvironment("BasketApiClient", basketApi.GetEndpoint("http"))
-           .WithEnvironment("OrderingApiClient", orderingApi.GetEndpoint("http"));
-
+identityApi.WithEnvironment("BasketApiClient", basketApi.GetEndpoint("https"))
+           .WithEnvironment("OrderingApiClient", orderingApi.GetEndpoint("https"))
+           .WithEnvironment("PaymentApiClient", paymentApi.GetEndpoint("https"));
 
 await builder.Build().RunAsync();
 

@@ -9,7 +9,7 @@
   <Project Path="src/Ordering.Domain/Ordering.Domain.csproj" Id="eeb22dd2-75e8-496b-960b-ee841ae30e76" />
   <Project Path="src/Ordering.Infrastructure/Ordering.Infrastructure.csproj" Id="2ed2c859-09e2-4346-a8ca-7adfdc189db8" />
   <Project Path="src/OrderProcessor/OrderProcessor.csproj" />
-  <Project Path="src/PaymentProcessor/PaymentProcessor.csproj" />
+  <Project Path="src/Payment.API/Payment.API.csproj" />
   <Project Path="src/PetStore.AppHost/PetStore.AppHost.csproj" />
   <Project Path="src/PetStore.ServiceDefaults/PetStore.ServiceDefaults.csproj" />
 </Solution>

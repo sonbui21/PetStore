@@ -9,6 +9,7 @@ public static class Config
             [
                 new ApiResource("orders", "Orders Service"),
                 new ApiResource("basket", "Basket Service"),
+                new ApiResource("payments", "Payment Service"),
             ];
     }
 
@@ -20,6 +21,7 @@ public static class Config
             [
                 new ApiScope("orders", "Orders Service"),
                 new ApiScope("basket", "Basket Service"),
+                new ApiScope("payments", "Payments Service"),
             ];
     }
 
@@ -125,8 +127,8 @@ public static class Config
                     AllowOfflineAccess = true,
                     AllowAccessTokensViaBrowser = true,
                     AlwaysIncludeUserClaimsInIdToken = true,
-                    AccessTokenLifetime = 60*60*2, // 2 hours
-                    IdentityTokenLifetime= 60*60*2 // 2 hours
+                    AccessTokenLifetime = 60*60*2,
+                    IdentityTokenLifetime= 60*60*2
                 },
                 new Client
                 {
@@ -136,11 +138,9 @@ public static class Config
                     RequirePkce = true,
                     RequireClientSecret = false,
 
-                    //RedirectUris = { $"{configuration["OrderingApiClient"]}/scalar" },
-                    //PostLogoutRedirectUris = { $"{configuration["OrderingApiClient"]}/scalar/" },
-                    RedirectUris = {"https://localhost:5031/scalar/"},
-                    PostLogoutRedirectUris = {"https://localhost:5031/scalar/"},
-                    AllowedCorsOrigins = { "https://localhost:5031" },
+                    RedirectUris = { $"{configuration["OrderingApiClient"]}/scalar/" },
+                    PostLogoutRedirectUris = { $"{configuration["OrderingApiClient"]}/scalar/" },
+                    AllowedCorsOrigins = { $"{configuration["OrderingApiClient"]}" },
 
                     AllowedScopes =
                     {
@@ -148,6 +148,32 @@ public static class Config
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
+                    },
+
+                    AllowOfflineAccess = true,
+                    AllowAccessTokensViaBrowser = true,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AccessTokenLifetime = 60*60*2,
+                    IdentityTokenLifetime= 60*60*2
+                },
+                new Client
+                {
+                    ClientId = "paymentscalar",
+                    ClientName = "Payment Scalar UI",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+
+                    RedirectUris = { $"{configuration["PaymentApiClient"]}/scalar/" },
+                    PostLogoutRedirectUris = { $"{configuration["PaymentApiClient"]}/scalar/" },
+                    AllowedCorsOrigins = { $"{configuration["PaymentApiClient"]}" },
+
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "payments",
                     },
 
                     AllowOfflineAccess = true,

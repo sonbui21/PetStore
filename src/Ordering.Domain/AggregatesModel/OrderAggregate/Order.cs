@@ -84,7 +84,7 @@ public class Order : Entity, IAggregateRoot
 
     public void SetAwaitingValidationStatus()
     {
-        if (OrderStatus == OrderStatus.Submitted)
+        if (OrderStatus == OrderStatus.PaymentConfirmed)
         {
             AddDomainEvent(new OrderStatusChangedToAwaitingValidationDomainEvent(Id, _orderItems));
             OrderStatus = OrderStatus.AwaitingValidation;

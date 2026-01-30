@@ -1,8 +1,8 @@
-﻿namespace PaymentProcessor.IntegrationEvents.EventHandling;
+﻿namespace Payment.API.Application.IntegrationEvents.EventHandling;
 
 public class OrderStatusChangedToStockConfirmedIntegrationEventHandler(
+    IPaymentRepository paymentRepository,
     IEventBus eventBus,
-    IOptionsMonitor<PaymentOptions> options,
     ILogger<OrderStatusChangedToStockConfirmedIntegrationEventHandler> logger) :
     IIntegrationEventHandler<OrderStatusChangedToStockConfirmedIntegrationEvent>
 {
@@ -14,18 +14,31 @@ public class OrderStatusChangedToStockConfirmedIntegrationEventHandler(
 
         // Business feature comment:
         // When OrderStatusChangedToStockConfirmed Integration Event is handled.
-        // Here we're simulating that we'd be performing the payment against any payment gateway
-        // Instead of a real payment we just take the env. var to simulate the payment 
-        // The payment can be successful or it can fail
-
-        if (options.CurrentValue.PaymentSucceeded)
+        var paymentIntentService = new PaymentIntentService();
+        var payment = await paymentRepository.GetByOrderIdAsync(@event.OrderId);
+        if (payment is not null)
         {
-            orderPaymentIntegrationEvent = new OrderPaymentSucceededIntegrationEvent(@event.OrderId);
+            var paymentIntent = await paymentIntentService.GetAsync(payment.PaymentIntentId);
+            if (paymentIntent.Status == "requires_capture")
+            {
+                var captured = await paymentIntentService.CaptureAsync(payment.PaymentIntentId);
+                payment.Status = captured.Status;
+
+                await paymentRepository.UnitOfWork.SaveEntitiesAsync();
+
+                orderPaymentIntegrationEvent = new OrderPaymentSucceededIntegrationEvent(@event.OrderId);
+            }
+            else
+            {
+                orderPaymentIntegrationEvent = new OrderPaymentFailedIntegrationEvent(@event.OrderId);
+            }
         }
         else
         {
             orderPaymentIntegrationEvent = new OrderPaymentFailedIntegrationEvent(@event.OrderId);
         }
+        
+
 
         logger.LogInformation("Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", orderPaymentIntegrationEvent.Id, orderPaymentIntegrationEvent);
 
